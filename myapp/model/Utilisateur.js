@@ -28,9 +28,9 @@ module.exports = {
         });
     },
 
-    creat: function (email, nom, prenom, pwd, type, callback) {
-        var sql = "INSERT INTO Utilisateur (email, nom, prenom, pwd, type) VALUES (?, ?, ?, ?, ?)";
-        db.query(sql, [email, nom, prenom, pwd, type], function (err, result) {
+    creat: function (email, nom, prenom, pwd, type, coordonnees, statut_compte, type_compte, organisation) {
+        var sql = "INSERT INTO Utilisateur (email, nom, prenom, pwd, type, coordonnees) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        db.query(sql, [email, nom, prenom, pwd, type, coordonnees, statut_compte, type_compte, organisation], function (err, result) {
             if (err) throw err;
             callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
         });
