@@ -1,4 +1,4 @@
-var db = require('./db.js');
+var db = require('./connexion_db.js');
 
 module.exports = {
     read: function (email, callback) {
@@ -29,7 +29,10 @@ module.exports = {
     },
 
     creat: function (email, nom, prenom, pwd, type, callback) {
-        //todo
-        return false;
-    }
+        var sql = "INSERT INTO Utilisateur (email, nom, prenom, pwd, type) VALUES (?, ?, ?, ?, ?)";
+        db.query(sql, [email, nom, prenom, pwd, type], function (err, result) {
+            if (err) throw err;
+            callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
+        });
+    },
 }
