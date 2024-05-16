@@ -35,4 +35,31 @@ module.exports = {
             callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
         });
     },
+
+    updateUser: function (email, newValues, callback) {
+        const sql = "UPDATE Utilisateur SET nom = ?, prenom = ?, pwd = ?, type = ?, coordonnees = ?, statut_compte = ?, type_compte = ?, organisation = ? WHERE email = ?";
+        const { nom, prenom, pwd, type, coordonnees, statut_compte, type_compte, organisation } = newValues;
+        db.query(sql, [nom, prenom, pwd, type, coordonnees, statut_compte, type_compte, organisation, email], function (err, result) {
+            if (err) {
+                callback(err, false);
+            } else {
+                callback(null, result.affectedRows > 0);
+            }
+        });
+    },
+
+    deleteUser: function (email, callback) {
+        const sql = "DELETE FROM Utilisateur WHERE email = ?";
+        db.query(sql, [email], function (err, result) {
+            if (err) {
+                callback(err, false);
+            } else {
+                callback(null, result.affectedRows > 0);
+            }
+        });
+    }
+    
+        
+    
 }
+

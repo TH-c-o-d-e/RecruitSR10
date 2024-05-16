@@ -24,4 +24,22 @@ module.exports = {
             callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
         });
     },
+
+     delete: function(SIREN, callback) {
+        var sql = "DELETE FROM Organisation WHERE SIREN = ?";
+        db.query(sql, [SIREN], function (err, result) {
+            if (err) throw err;
+            callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
+        });
+    },
+
+     update: function(SIREN, nom, type, siege_social, callback) {
+        var sql = "UPDATE Organisation SET nom = ?, type = ?, siege_social = ? WHERE SIREN = ?";
+        db.query(sql, [nom, type, siege_social, SIREN], function (err, result) {
+            if (err) throw err;
+            callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
+        });
+    }
+    
+    
 }

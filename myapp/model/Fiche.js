@@ -24,4 +24,34 @@ module.exports = {
             callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
         });
     },
+
+
+readByIntituleAndOrganisation: function (intitule, organisation, callback) {
+    db.query("SELECT * FROM Fiche WHERE intitule = ? AND organisation = ?", [intitule, organisation], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+
+  update: function (id, intitule, organisation, statut_poste, responsable, lieu_mission, rythme, fourchette, callback) {
+    var sql = "UPDATE Fiche SET intitule = ?, organisation = ?, statut_poste = ?, responsable = ?, lieu_mission = ?, rythme = ?, fourchette = ? WHERE id = ?";
+    db.query(sql, [intitule, organisation, statut_poste, responsable, lieu_mission, rythme, fourchette, id], function (err, result) {
+      if (err) throw err;
+      callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
+    });
+
+
+},
+deleteById: function (id, callback) {
+    var sql = "DELETE FROM Fiche WHERE id = ?";
+    db.query(sql, [id], function (err, result) {
+      if (err) throw err;
+      callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
+    });
+  },
+  
+  
+
 }
+
+

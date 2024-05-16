@@ -24,4 +24,29 @@ module.exports = {
             callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
         });
     },
+
+    readByNumeroOffre: function (numero_offre, callback) {
+        db.query("SELECT * FROM Offre WHERE numero_offre = ?", [numero_offre], function (err, results) {
+          if (err) throw err;
+          callback(results);
+        });
+      },
+      
+      update: function (id, numero_offre, rattachement, etat, date_validite, indications, liste_pieces, nombre_pieces, callback) {
+        var sql = "UPDATE Offre SET numero_offre = ?, rattachement = ?, etat = ?, date_validite = ?, indications = ?, liste_pieces = ?, nombre_pieces = ? WHERE id = ?";
+        db.query(sql, [numero_offre, rattachement, etat, date_validite, indications, liste_pieces, nombre_pieces, id], function (err, result) {
+          if (err) throw err;
+          callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
+        });
+      },
+
+      deleteById: function (id, callback) {
+        var sql = "DELETE FROM Offre WHERE id = ?";
+        db.query(sql, [id], function (err, result) {
+          if (err) throw err;
+          callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
+        });
+      },
+             
+      
 }
