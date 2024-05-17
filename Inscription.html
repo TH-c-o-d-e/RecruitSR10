@@ -1,25 +1,104 @@
 <!DOCTYPE html>
-<head>
-  <meta charset="UTF-8" />
-  <meta  name="viewport" content="width=device-width"> 
-  <title> Inscription </title>
-  <link rel="stylesheet" type="text/css" href="style.css" />
-</head>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Inscription</title>
+    <link rel="stylesheet" type="text/css" href="styleinscription.css" />
+    <style>
+      body {
+        color: black;
+        background-color: white;
+        background-image: url(https://img.freepik.com/photos-gratuite/assortiment-bureau-plat-tablette-ecran-vide_23-2148707960.jpg?w=2000&t=st=1711730238~exp=1711730838~hmac=c3faec85d42a44b531b8c237e3322147f5dbc9275d67feafe79bbfd96e113cb4);
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+      }
 
-<body>
-  <h1>Page d'inscription</h1>
-  <form action="" method="">
-    <legend>Entrez vos informations</legend>
-    Email: <input type="email" placeholder="Adresse mail" />
-    <br />
-    Mot de passe: <input type="password" placeholder="Mot de passe" />
-    <br />
-    Nom: <input type="text" placeholder="Nom" />
-    <br />
-    Prenom: <input type="text" placeholder="Prenom" />
-    <br />
-    Date de naissance: <input type="date" />
-    <br />
-    Numero de telephone: <input type="tel" />
-  </form>
-</body>
+      .container {
+        width: 300px;
+        padding: 16px;
+        background-color: white;
+        margin: 0 auto;
+        margin-top: 100px;
+        border: 1px solid black;
+        border-radius: 4px;
+      }
+
+      .container form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container form label {
+        margin-bottom: 5px;
+      }
+
+      .container form input[type="text"],
+      .container form input[type="password"],
+      .container form input[type="email"],
+      .container form input[type="date"],
+      .container form input[type="tel"] {
+        width: calc(100% - 20px);
+        padding: 15px;
+        margin-bottom: 10px;
+        border: none;
+        background: #f1f1f1;
+      }
+
+      .container form button {
+        width: calc(100% - 40px);
+        background-color: #4caf50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        opacity: 0.9;
+      }
+
+      .container form button:hover {
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="slogan">
+      <h2>
+        Rejoignez notre plateforme pour postuler à des milliers d'emplois dès
+        maintenant !
+      </h2>
+    </div>
+    <div class="container">
+      <form action="" method="post">
+        <legend><strong>Entrez vos informations</strong></legend>
+        <label for="email"><b>Email:</b></label>
+        <input type="email" id="email" placeholder="Adresse mail" required />
+
+        <label for="motdepasse"><b>Mot de passe:</b></label>
+        <input
+          type="password"
+          id="motdepasse"
+          placeholder="Mot de passe"
+          minlength="10"
+          required
+        />
+
+        <label for="nom"><b>Nom:</b></label>
+        <input type="text" id="nom" placeholder="Nom" required />
+
+        <label for="prenom"><b>Prenom:</b></label>
+        <input type="text" id="prenom" placeholder="Prenom" required />
+
+        <label for="datenaissance"><b>Date de naissance:</b></label>
+        <input type="date" id="datenaissance" required />
+
+        <label for="numero"><b>Numero de telephone:</b></label>
+        <input type="tel" id="numero" required />
+
+        <button type="submit">Valider</button>
+      </form>
+    </div>
+  </body>
+</html>
