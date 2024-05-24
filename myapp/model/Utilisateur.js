@@ -57,8 +57,9 @@ module.exports = {
                 callback(null, result.affectedRows > 0);
             }
         });
-    }
-    
+    },
+
+ 
         
     
 }
