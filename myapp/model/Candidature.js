@@ -1,4 +1,4 @@
-const DB = require('./connexion_db.js');
+const db = require('./connexion_db.js');
 
 module.exports = {
     read: function (offre, candidat, callback) {

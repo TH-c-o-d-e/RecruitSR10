@@ -1,4 +1,4 @@
-const DB = require("./connexion_bd.js");
+const db = require("./connexion_bd.js");
 module.exports = {
     read: function (SIREN, callback) {
         db.query("select * from Organisation where Siren =  ?",SIREN, function
