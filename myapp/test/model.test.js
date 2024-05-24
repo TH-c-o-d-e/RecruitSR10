@@ -1,4 +1,4 @@
-const DB = require("../model/connexion_bd.js");
+db = require("../model/connexion_bd.js");
 const model = require("../model/Utilisateur.js");
 describe("Model Tests", () => {
     beforeAll(() => {
