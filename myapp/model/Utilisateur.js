@@ -1,4 +1,4 @@
-var db = require('./connexion_db.js');
+const DB = require('./connexion_db.js');
 
 module.exports = {
     read: function (email, callback) {
