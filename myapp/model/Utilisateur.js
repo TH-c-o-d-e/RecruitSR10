@@ -58,8 +58,18 @@ module.exports = {
             }
         });
     },
-
- 
+    
+    alreadyExists: function (email, callback) {
+        const sql = "SELECT COUNT(*) AS count FROM Utilisateur WHERE email = ?";
+        db.query(sql, email, function (err, results) {
+            if (err) {
+                throw err;
+            }
+            const userCount = results[0].count;
+            callback(userCount > 0);
+        });
+    }
+    
         
     
 }

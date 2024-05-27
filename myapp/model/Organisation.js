@@ -38,7 +38,17 @@ module.exports = {
             if (err) throw err;
             callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
         });
+    },
+    
+
+    alreadyExists: function (SIREN, callback) {
+        const sql = "SELECT COUNT(*) AS count FROM Organisation WHERE SIREN = ?";
+        db.query(sql, SIREN, function (err, results) {
+            if (err) {
+                throw err;
+            }
+            const organisationCount = results[0].count;
+            callback(organisationCount > 0);
+        });
     }
-    
-    
 }
