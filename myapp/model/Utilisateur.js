@@ -65,10 +65,11 @@ module.exports = {
             if (err) {
                 throw err;
             }
-            const userCount = results[0].count;
+            const userCount = results[0].count; // Trouver comment break dès que l'organisation a été trouvée
             callback(userCount > 0);
         });
-    }
+        },
+
     
         
     
