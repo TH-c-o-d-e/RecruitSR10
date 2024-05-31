@@ -1,77 +1,67 @@
-const db = require("./connexion_bd.js");
+const db = require('./connexion_db.js');
 
 module.exports = {
-    read: function (email, callback) {
-        db.query("select * from Utilisateur where email= ?",email, function
-         (err, results) {
-            if (err) throw err;
-            callback(results);
-        });
-    },
+  read: function (id, callback) {
+    db.query("SELECT * FROM Utilisateur WHERE id = ?", id, function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
 
-    readall: function (callback) {
-        db.query("select * from Utilisateur", function (err, results) {
-            if (err) throw err;
-            callback(results);
-        });
-    },
-    areValid: function (email, password, callback) {
-        sql = "SELECT pwd FROM USERS WHERE email = ?";
-        rows = db.query(sql, email, function (err, results) {
-            if (err) throw err;
-            if (rows.length == 1 && rows[0].pwd === password) {
-                callback(true)
-            } 
-            else {
-                callback(false);
-            }
-        });
-    },
+  readByEmail: function (email, callback) {
+    db.query("SELECT * FROM Utilisateur WHERE email = ?", email, function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
 
-    creat: function (email, nom, prenom, pwd, type, coordonnees, statut_compte, type_compte, organisation) {
-        var sql = "INSERT INTO Utilisateur (email, nom, prenom, pwd, type, coordonnees) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        db.query(sql, [email, nom, prenom, pwd, type, coordonnees, statut_compte, type_compte, organisation], function (err, result) {
-            if (err) throw err;
-            callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
-        });
-    },
+  readAll: function (callback) {
+    db.query("SELECT * FROM Utilisateur", function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
 
-    updateUser: function (email, newValues, callback) {
-        const sql = "UPDATE Utilisateur SET nom = ?, prenom = ?, pwd = ?, type = ?, coordonnees = ?, statut_compte = ?, type_compte = ?, organisation = ? WHERE email = ?";
-        const { nom, prenom, pwd, type, coordonnees, statut_compte, type_compte, organisation } = newValues;
-        db.query(sql, [nom, prenom, pwd, type, coordonnees, statut_compte, type_compte, organisation, email], function (err, result) {
-            if (err) {
-                callback(err, false);
-            } else {
-                callback(null, result.affectedRows > 0);
-            }
-        });
-    },
+  create: function (email, nom, prenom, mot_de_passe, type_compte, telephone, adresse, code_postal, ville, callback) {
+    var sql = "INSERT INTO Utilisateur (email, nom, prenom, mot_de_passe, type_compte, telephone, adresse, code_postal, ville) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    db.query(sql, [email, nom, prenom, mot_de_passe, type_compte, telephone, adresse, code_postal, ville], function (err, result) {
+      if (err) throw err;
+      callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
+    });
+  },
 
-    deleteUser: function (email, callback) {
-        const sql = "DELETE FROM Utilisateur WHERE email = ?";
-        db.query(sql, [email], function (err, result) {
-            if (err) {
-                callback(err, false);
-            } else {
-                callback(null, result.affectedRows > 0);
-            }
-        });
-    },
-    
-    alreadyExists: function (email, callback) {
-        const sql = "SELECT COUNT(*) AS count FROM Utilisateur WHERE email = ?";
-        db.query(sql, email, function (err, results) {
-            if (err) {
-                throw err;
-            }
-            const userCount = results[0].count; // Trouver comment break dès que l'organisation a été trouvée
-            callback(userCount > 0);
-        });
-        },
+  update: function (id, email, nom, prenom, mot_de_passe, type_compte, telephone, adresse, code_postal, ville, callback) {
+    var sql = "UPDATE Utilisateur SET email = ?, nom = ?, prenom = ?, mot_de_passe = ?, type_compte = ?, telephone = ?, adresse = ?, code_postal = ?, ville = ? WHERE id = ?";
+    db.query(sql, [email, nom, prenom, mot_de_passe, type_compte, telephone, adresse, code_postal, ville, id], function (err, result) {
+      if (err) throw err;
+      callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
+    });
+  },
 
-    
-        
-    
-}
+  updateTypeCompte: function (id, newTypeCompte, callback) {
+    var sql = "UPDATE Utilisateur SET type_compte = ? WHERE id = ?";
+    db.query(sql, [newTypeCompte, id], function (err, result) {
+      if (err) throw err;
+      callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
+    });
+  },
 
+  delete: function (id, callback) {
+    var sql = "DELETE FROM Utilisateur WHERE id = ?";
+    db.query(sql, [id], function (err, result) {
+      if (err) throw err;
+      callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
+    });
+  },
+
+  alreadyExists: function (email, callback) {
+    const sql = "SELECT COUNT(*) AS count FROM Utilisateur WHERE email = ?";
+    db.query(sql, email, function (err, results) {
+      if (err) {
+        throw err;
+      }
+      const userCount = results[0].count;
+      callback(userCount > 0);
+    });
+  }
+};
