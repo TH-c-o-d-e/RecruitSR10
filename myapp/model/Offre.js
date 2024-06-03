@@ -47,6 +47,27 @@ module.exports = {
           callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
         });
       },
+      filtreRattachement: function (rattachement, callback) {
+        db.query("SELECT * FROM Offre WHERE rattachement = ?", [rattachement], function (err, results) {
+          if (err) throw err;
+          callback(results);
+        });
+      },
+      
+    filtreEtat: function (etat, callback) {
+        db.query("SELECT * FROM Offre WHERE etat = ?", [etat], function (err, results) {
+          if (err) throw err;
+          callback(results);
+        });
+      },
+      
+      filtreDateValidite: function (date_validite, callback) {
+        db.query("SELECT * FROM Offre WHERE date_validite = ?", [date_validite], function (err, results) {
+          if (err) throw err;
+          callback(results);
+        });
+      },
+
              
       
 }

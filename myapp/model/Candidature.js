@@ -47,5 +47,25 @@ module.exports = {
           callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
         });
       },
+      readByOffre: function (offre, callback) {
+        db.query("SELECT * FROM Candidature WHERE offre = ?", [offre], function (err, results) {
+          if (err) throw err;
+          callback(results);
+        });
+      },
+      
+      readByCandidat: function (candidat, callback) {
+        db.query("SELECT * FROM Candidature WHERE candidat = ?", [candidat], function (err, results) {
+          if (err) throw err;
+          callback(results);
+        });
+      },
+      
+      readByDate: function (date, callback) {
+        db.query("SELECT * FROM Candidature WHERE date = ?", [date], function (err, results) {
+          if (err) throw err;
+          callback(results);
+        });
+      },
       
 }

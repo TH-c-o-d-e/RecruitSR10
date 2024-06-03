@@ -63,5 +63,20 @@ module.exports = {
       const userCount = results[0].count;
       callback(userCount > 0);
     });
-  }
+  },
+  readByTypeCompte: function (type_compte, callback) {
+    db.query("SELECT * FROM Utilisateur WHERE type_compte = ?", [type_compte], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  
+  readByStatutCompte: function (statut_compte, callback) {
+    db.query("SELECT * FROM Utilisateur WHERE statut_compte = ?", [statut_compte], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  
 };
+

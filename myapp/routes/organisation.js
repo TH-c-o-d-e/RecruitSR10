@@ -61,4 +61,48 @@ router.delete('/deleteorganisation', function (req, res, next) {
   });
 });
 
+/* GET organisations by type */
+router.get('/organisationsbytype/:type', function (req, res, next) {
+  const type = req.params.type;
+  organisationModel.readByType(type, function (result) {
+    res.render('organisationsList', { title: 'Liste des organisations par type', organisations: result });
+  });
+});
+
+/* GET organisations by siege social */
+router.get('/organisationsbysiegesocial/:siege_social', function (req, res, next) {
+  const siege_social = req.params.siege_social;
+  organisationModel.readBySiegeSocial(siege_social, function (result) {
+    res.render('organisationsList', { title: 'Liste des organisations par siège social', organisations: result });
+  });
+});
+
+/* GET organisations by filter */
+router.get('/organisationsbyfilter/:filter/:value', function (req, res, next) {
+  const filter = req.params.filter;
+  const value = req.params.value;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'type':
+      queryFunction = organisationModel.readByType;
+      title = 'Liste des organisations par type';
+      break;
+    case 'siege_social':
+      queryFunction = organisationModel.readBySiegeSocial;
+      title = 'Liste des organisations par siège social';
+      break;
+    default:
+      res.status(400).send('Filtre non valide');
+      return;
+  }
+
+  queryFunction(value, function (result) {
+    res.render('organisationsList', { title: title, organisations: result });
+  });
+});
+
+
 module.exports = router;

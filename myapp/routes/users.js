@@ -89,4 +89,80 @@ router.put('/changeusertype', function (req, res, next) {
   });
 });
 
+/* GET users by filter */
+router.get('/usersbyfilter/:filter/:value', function (req, res, next) {
+  const filter = req.params.filter;
+  const value = req.params.value;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'type_compte':
+      queryFunction = userModel.readByTypeCompte;
+      title = 'Liste des utilisateurs par type de compte';
+      break;
+    case 'statut_compte':
+      queryFunction = userModel.readByStatutCompte;
+      title = 'Liste des utilisateurs par statut de compte';
+      break;
+    default:
+      res.status(400).send('Filtre non valide');
+      return;
+  }
+
+  queryFunction(value, function (result) {
+    res.render('usersList', { title: title, users: result });
+  });
+});
+
+/* GET users by type_compte */
+router.get('/usersbytypecompte/:type_compte', function (req, res, next) {
+  const type_compte = req.params.type_compte;
+  userModel.readByTypeCompte(type_compte, function (result) {
+    res.render('usersList', { title: 'Liste des utilisateurs par type de compte', users: result });
+  });
+});
+
+/* GET users by statut_compte */
+router.get('/usersbystatutcompte/:statut_compte', function (req, res, next) {
+  const statut_compte = req.params.statut_compte;
+  userModel.readByStatutCompte(statut_compte, function (result) {
+    res.render('usersList', { title: 'Liste des utilisateurs par statut de compte', users: result });
+  });
+});
+
+/* GET offres by filter */
+router.get('/offresbyfilter/:filter/:value', function (req, res, next) {
+  const filter = req.params.filter;
+  const value = req.params.value;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'rattachement':
+      queryFunction = offreModel.readByRattachement;
+      title = 'Liste des offres par rattachement';
+      break;
+    case 'etat':
+      queryFunction = offreModel.readByEtat;
+      title = 'Liste des offres par état';
+      break;
+    case 'date_validite':
+      queryFunction = offreModel.readByDateValidite;
+      title = 'Liste des offres par date de validité';
+      break;
+    default:
+      res.status(400).send('Filtre non valide');
+      return;
+  }
+
+  queryFunction(value, function (result) {
+    res.render('offresList', { title: title, offres: result });
+  });
+});
+
+
+
 module.exports = router;

@@ -57,4 +57,62 @@ router.delete('/deleteoffre', function (req, res, next) {
   });
 });
 
+/* GET offres by rattachement */
+router.get('/offresbyrattachement/:rattachement', function (req, res, next) {
+  const rattachement = req.params.rattachement;
+  offreModel.readByRattachement(rattachement, function (result) {
+    res.render('offresList', { title: 'Liste des offres par rattachement', offres: result });
+  });
+});
+
+/* GET offres by etat */
+router.get('/offresbyetat/:etat', function (req, res, next) {
+  const etat = req.params.etat;
+  offreModel.readByEtat(etat, function (result) {
+    res.render('offresList', { title: 'Liste des offres par état', offres: result });
+  });
+});
+
+/* GET offres by date validite */
+router.get('/offresbydatevalidite/:date_validite', function (req, res, next) {
+  const date_validite = req.params.date_validite;
+  offreModel.readByDateValidite(date_validite, function (result) {
+    res.render('offresList', { title: 'Liste des offres par date de validité', offres: result });
+  });
+});
+
+// Ceci est un filtre global pour mieux paramétrer les routes
+
+/* GET offres by filter */
+router.get('/offresbyfilter/:filter/:value', function (req, res, next) {
+  const filter = req.params.filter;
+  const value = req.params.value;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'rattachement':
+      queryFunction = offreModel.readByRattachement;
+      title = 'Liste des offres par rattachement';
+      break;
+    case 'etat':
+      queryFunction = offreModel.readByEtat;
+      title = 'Liste des offres par état';
+      break;
+    case 'date_validite':
+      queryFunction = offreModel.readByDateValidite;
+      title = 'Liste des offres par date de validité';
+      break;
+    default:
+      res.status(400).send('Filtre non valide');
+      return;
+  }
+
+  queryFunction(value, function (result) {
+    res.render('offresList', { title: title, offres: result });
+  });
+});
+
+
 module.exports = router;

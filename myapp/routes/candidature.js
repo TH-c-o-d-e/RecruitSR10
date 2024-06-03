@@ -54,4 +54,60 @@ router.delete('/deletecandidature', function (req, res, next) {
   });
 });
 
+/* GET candidatures by offre */
+router.get('/candidaturesbyoffre/:offre', function (req, res, next) {
+  const offre = req.params.offre;
+  candidatureModel.readByOffre(offre, function (result) {
+    res.render('candidaturesList', { title: 'Liste des candidatures par offre', candidatures: result });
+  });
+});
+
+/* GET candidatures by candidat */
+router.get('/candidaturesbycandidat/:candidat', function (req, res, next) {
+  const candidat = req.params.candidat;
+  candidatureModel.readByCandidat(candidat, function (result) {
+    res.render('candidaturesList', { title: 'Liste des candidatures par candidat', candidatures: result });
+  });
+});
+
+/* GET candidatures by date */
+router.get('/candidaturesbydate/:date', function (req, res, next) {
+  const date = req.params.date;
+  candidatureModel.readByDate(date, function (result) {
+    res.render('candidaturesList', { title: 'Liste des candidatures par date', candidatures: result });
+  });
+});
+
+/* GET candidatures by filter */
+router.get('/candidaturesbyfilter/:filter/:value', function (req, res, next) {
+  const filter = req.params.filter;
+  const value = req.params.value;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'offre':
+      queryFunction = candidatureModel.readByOffre;
+      title = 'Liste des candidatures par offre';
+      break;
+    case 'candidat':
+      queryFunction = candidatureModel.readByCandidat;
+      title = 'Liste des candidatures par candidat';
+      break;
+    case 'date':
+      queryFunction = candidatureModel.readByDate;
+      title = 'Liste des candidatures par date';
+      break;
+    default:
+      res.status(400).send('Filtre non valide');
+      return;
+  }
+
+  queryFunction(value, function (result) {
+    res.render('candidaturesList', { title: title, candidatures: result });
+  });
+});
+
+
 module.exports = router;

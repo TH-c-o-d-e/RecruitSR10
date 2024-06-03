@@ -57,4 +57,29 @@ router.delete('/deletefiche', function (req, res, next) {
   });
 });
 
+/* GET fiches by intitule */
+router.get('/fichesbyintitule/:intitule', function (req, res, next) {
+  const intitule = req.params.intitule;
+  ficheModel.readByIntitule(intitule, function (result) {
+    res.render('fichesList', { title: 'Liste des fiches par intitulé', fiches: result });
+  });
+});
+
+/* GET fiches by organisation */
+router.get('/fichesbyorganisation/:organisation', function (req, res, next) {
+  const organisation = req.params.organisation;
+  ficheModel.readByOrganisation(organisation, function (result) {
+    res.render('fichesList', { title: 'Liste des fiches par organisation', fiches: result });
+  });
+});
+
+/* GET fiches by statut poste */
+router.get('/fichesbystatutposte/:statut_poste', function (req, res, next) {
+  const statut_poste = req.params.statut_poste;
+  ficheModel.readByStatutPoste(statut_poste, function (result) {
+    res.render('fichesList', { title: 'Liste des fiches par statut de poste', fiches: result });
+  });
+});
+
+
 module.exports = router;

@@ -50,5 +50,19 @@ module.exports = {
             const organisationCount = results[0].count;
             callback(organisationCount > 0);
         });
-    }
+    },
+    readByType: function (type, callback) {
+        db.query("SELECT * FROM Organisation WHERE type = ?", [type], function (err, results) {
+          if (err) throw err;
+          callback(results);
+        });
+      },
+      
+      readBySiegeSocial: function (siege_social, callback) {
+        db.query("SELECT * FROM Organisation WHERE siege_social = ?", [siege_social], function (err, results) {
+          if (err) throw err;
+          callback(results);
+        });
+      },
+      
 }

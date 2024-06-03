@@ -50,7 +50,27 @@ deleteById: function (id, callback) {
     });
   },
   
+  readByIntitule: function (intitule, callback) {
+    db.query("SELECT * FROM Fiche WHERE intitule = ?", [intitule], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
   
+  readByOrganisation: function (organisation, callback) {
+    db.query("SELECT * FROM Fiche WHERE organisation = ?", [organisation], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  
+  readByStatutPoste: function (statut_poste, callback) {
+    db.query("SELECT * FROM Fiche WHERE statut_poste = ?", [statut_poste], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+    
 
 }
 
