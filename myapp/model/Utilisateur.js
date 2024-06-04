@@ -8,13 +8,14 @@ module.exports = {
     });
   },
 
-  readByEmail: function (email, callback) {
-    db.query("SELECT * FROM Utilisateur WHERE email = ?", email, function (err, results) {
-      if (err) throw err;
-      callback(results);
-    });
-  },
+  readbyEmail: function (email, callback) { 
+    db.query("select * from Utilisateur where email= ?",email, function (err, results) { 
+        if (err) throw err; 
+        callback(results); 
 
+    }); 
+
+},
   readAll: function (callback) {
     db.query("SELECT * FROM Utilisateur", function (err, results) {
       if (err) throw err;
@@ -22,25 +23,29 @@ module.exports = {
     });
   },
 
-  create: function (email, nom, prenom, mot_de_passe, type_compte, telephone, adresse, code_postal, ville, callback) {
-    var sql = "INSERT INTO Utilisateur (email, nom, prenom, mot_de_passe, type_compte, telephone, adresse, code_postal, ville) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(sql, [email, nom, prenom, mot_de_passe, type_compte, telephone, adresse, code_postal, ville], function (err, result) {
+  areValid: function (email, password, callback) { 
+    sql = "SELECT pwd FROM USERS WHERE email = ?"; 
+    rows = db.query(sql, email, function (err, results) { 
+        if (err) throw err; 
+        if (rows.length == 1 && rows[0].pwd === password) { 
+            callback(true) 
+        } else { 
+            callback(false); 
+        } 
+    });
+  },
+
+  create: function (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, callback) {
+    var sql = "INSERT INTO Utilisateur (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    db.query(sql, [id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation], function (err, result) {
       if (err) throw err;
       callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
     });
   },
 
-  update: function (id, email, nom, prenom, mot_de_passe, type_compte, telephone, adresse, code_postal, ville, callback) {
-    var sql = "UPDATE Utilisateur SET email = ?, nom = ?, prenom = ?, mot_de_passe = ?, type_compte = ?, telephone = ?, adresse = ?, code_postal = ?, ville = ? WHERE id = ?";
-    db.query(sql, [email, nom, prenom, mot_de_passe, type_compte, telephone, adresse, code_postal, ville, id], function (err, result) {
-      if (err) throw err;
-      callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
-    });
-  },
-
-  updateTypeCompte: function (id, newTypeCompte, callback) {
-    var sql = "UPDATE Utilisateur SET type_compte = ? WHERE id = ?";
-    db.query(sql, [newTypeCompte, id], function (err, result) {
+  update: function (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, callback) {
+    var sql = "UPDATE Utilisateur SET email = ?, mot_de_passe = ?, prenom = ?, nom = ?, coordonnees = ?, statut_compte = ?, type_compte = ?, organisation = ? WHERE id = ?";
+    db.query(sql, [email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, id], function (err, result) {
       if (err) throw err;
       callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
     });
@@ -54,29 +59,17 @@ module.exports = {
     });
   },
 
-  alreadyExists: function (email, callback) {
-    const sql = "SELECT COUNT(*) AS count FROM Utilisateur WHERE email = ?";
-    db.query(sql, email, function (err, results) {
-      if (err) {
-        throw err;
-      }
-      const userCount = results[0].count;
-      callback(userCount > 0);
-    });
-  },
   readByTypeCompte: function (type_compte, callback) {
     db.query("SELECT * FROM Utilisateur WHERE type_compte = ?", [type_compte], function (err, results) {
       if (err) throw err;
       callback(results);
     });
   },
-  
+
   readByStatutCompte: function (statut_compte, callback) {
     db.query("SELECT * FROM Utilisateur WHERE statut_compte = ?", [statut_compte], function (err, results) {
       if (err) throw err;
       callback(results);
     });
   },
-  
-};
-
+}

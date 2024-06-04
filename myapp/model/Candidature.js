@@ -1,71 +1,62 @@
 const db = require('./connexion_db.js');
 
 module.exports = {
-    read: function (offre, candidat, callback) {
-        db.query("select (* , *) from Candidature where (offre, candidat) =(?, ?)",offre, candidat, function
-         (err, results) {
-            if (err) throw err;
-            callback(results);
-        });
-    },
+  read: function (offre, candidat, callback) {
+    db.query("SELECT * FROM Candidature WHERE offre = ? AND candidat = ?", [offre, candidat], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
 
-    readall: function (callback) {
-        db.query("select * from Candidature", function (err, results) {
-            if (err) throw err;
-            callback(results);
-        });
-    },
-   
+  readAll: function (callback) {
+    db.query("SELECT * FROM Candidature", function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
 
-    creat: function (offre, candidat, date , pieces, callback) {
-        var sql = "INSERT INTO Candidature (offre, candidat, date, pieces) VALUES (?, ?, ?, ?)";
-        db.query(sql, [offre, candidat, date, pieces], function (err, result) {
-            if (err) throw err;
-            callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
-        });
-    },
+  create: function (offre, candidat, date, pieces, callback) {
+    var sql = "INSERT INTO Candidature (offre, candidat, date, pieces) VALUES (?, ?, ?, ?)";
+    db.query(sql, [offre, candidat, date, pieces], function (err, result) {
+      if (err) throw err;
+      callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
+    });
+  },
 
-    readByOffreAndCandidat: function (offre, candidat, callback) {
-        db.query("SELECT * FROM Candidature WHERE offre = ? AND candidat = ?", [offre, candidat], function (err, results) {
-          if (err) throw err;
-          callback(results);
-        });
-      },
+  update: function (offre, candidat, date, pieces, callback) {
+    var sql = "UPDATE Candidature SET date = ?, pieces = ? WHERE offre = ? AND candidat = ?";
+    db.query(sql, [date, pieces, offre, candidat], function (err, result) {
+      if (err) throw err;
+      callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
+    });
+  },
 
-      update: function (id, offre, candidat, date, pieces, callback) {
-        var sql = "UPDATE Candidature SET offre = ?, candidat = ?, date = ?, pieces = ? WHERE id = ?";
-        db.query(sql, [offre, candidat, date, pieces, id], function (err, result) {
-          if (err) throw err;
-          callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
-        });
-      },
+  delete: function (offre, candidat, callback) {
+    var sql = "DELETE FROM Candidature WHERE offre = ? AND candidat = ?";
+    db.query(sql, [offre, candidat], function (err, result) {
+      if (err) throw err;
+      callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
+    });
+  },
 
-      update: function (id, offre, candidat, date, pieces, callback) {
-        var sql = "UPDATE Candidature SET offre = ?, candidat = ?, date = ?, pieces = ? WHERE id = ?";
-        db.query(sql, [offre, candidat, date, pieces, id], function (err, result) {
-          if (err) throw err;
-          callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
-        });
-      },
-      readByOffre: function (offre, callback) {
-        db.query("SELECT * FROM Candidature WHERE offre = ?", [offre], function (err, results) {
-          if (err) throw err;
-          callback(results);
-        });
-      },
-      
-      readByCandidat: function (candidat, callback) {
-        db.query("SELECT * FROM Candidature WHERE candidat = ?", [candidat], function (err, results) {
-          if (err) throw err;
-          callback(results);
-        });
-      },
-      
-      readByDate: function (date, callback) {
-        db.query("SELECT * FROM Candidature WHERE date = ?", [date], function (err, results) {
-          if (err) throw err;
-          callback(results);
-        });
-      },
-      
-}
+  readByOffre: function (offre, callback) {
+    db.query("SELECT * FROM Candidature WHERE offre = ?", [offre], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+
+  readByCandidat: function (candidat, callback) {
+    db.query("SELECT * FROM Candidature WHERE candidat = ?", [candidat], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+
+  readByDate: function (date, callback) {
+    db.query("SELECT * FROM Candidature WHERE date = ?", [date], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  }
+};

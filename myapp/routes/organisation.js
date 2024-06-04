@@ -1,22 +1,21 @@
 var express = require('express');
 var router = express.Router();
-const DB = require("../model/connexion_db.js");
-const organisationModel = require('../model/Organisation.js'); // Assurez-vous d'importer correctement votre modèle d'organisation
+const organisationModel = require('../model/Organisation.js');
 
 /* GET organisations listing. */
 router.get('/organisationslist', function (req, res, next) {
-  organisationModel.readall(function (result) {
+  organisationModel.readAll(function (result) {
     res.render('organisationsList', { title: 'Liste des organisations', organisations: result });
   });
 });
 
 /* On met à jour une organisation */
 router.put('/editorganisation', function (req, res, next) {
-  const SIREN = req.body.SIREN;
+  const siren = req.body.siren;
   const nom = req.body.nom;
   const type = req.body.type;
   const siege_social = req.body.siege_social;
-  organisationModel.update(SIREN, nom, type, siege_social, function (err, success) {
+  organisationModel.update(siren, nom, type, siege_social, function (err, success) {
     if (err) {
       res.status(500).send("Erreur lors de la mise à jour de l'organisation.");
     } else if (success) {
@@ -29,28 +28,23 @@ router.put('/editorganisation', function (req, res, next) {
 
 /* On crée une organisation */
 router.post('/createorganisation', function(req, res, next) {
-  const newOrganisation = req.body;
-  organisationModel.alreadyExists(newOrganisation.SIREN, function(err, exists) {
+  const siren = req.body.siren;
+  const nom = req.body.nom;
+  const type = req.body.type;
+  const siege_social = req.body.siege_social;
+  organisationModel.create(siren, nom, type, siege_social, function(err, result) {
     if (err) {
-      res.status(500).send("Erreur lors de la vérification de l'existence de l'organisation.");
-    } else if (exists) {
-      res.status(401).send("L'organisation existe déjà \n");
+      res.status(500).send("Erreur lors de la création de l'organisation.");
     } else {
-      organisationModel.creat(newOrganisation.SIREN, newOrganisation.nom, newOrganisation.type, newOrganisation.siege_social, function(err, result) {
-        if (err) {
-          res.status(500).send("Erreur lors de la création de l'organisation.");
-        } else {
-          res.redirect("/organisationslist");
-        }
-      });
+      res.redirect("/organisationslist");
     }
   });
 });
 
 /* On supprime une organisation */
 router.delete('/deleteorganisation', function (req, res, next) {
-  const SIREN = req.body.SIREN;
-  organisationModel.delete(SIREN, function(err, success) {
+  const siren = req.body.siren;
+  organisationModel.delete(siren, function(err, success) {
     if (err) {
       res.status(500).send("Erreur lors de la suppression de l'organisation.");
     } else if (success) {
@@ -69,40 +63,10 @@ router.get('/organisationsbytype/:type', function (req, res, next) {
   });
 });
 
-/* GET organisations by siege social */
+/* GET organisations by siege_social */
 router.get('/organisationsbysiegesocial/:siege_social', function (req, res, next) {
   const siege_social = req.params.siege_social;
   organisationModel.readBySiegeSocial(siege_social, function (result) {
     res.render('organisationsList', { title: 'Liste des organisations par siège social', organisations: result });
   });
 });
-
-/* GET organisations by filter */
-router.get('/organisationsbyfilter/:filter/:value', function (req, res, next) {
-  const filter = req.params.filter;
-  const value = req.params.value;
-
-  let queryFunction;
-  let title;
-
-  switch (filter) {
-    case 'type':
-      queryFunction = organisationModel.readByType;
-      title = 'Liste des organisations par type';
-      break;
-    case 'siege_social':
-      queryFunction = organisationModel.readBySiegeSocial;
-      title = 'Liste des organisations par siège social';
-      break;
-    default:
-      res.status(400).send('Filtre non valide');
-      return;
-  }
-
-  queryFunction(value, function (result) {
-    res.render('organisationsList', { title: title, organisations: result });
-  });
-});
-
-
-module.exports = router;

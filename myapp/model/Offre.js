@@ -68,6 +68,15 @@ module.exports = {
         });
       },
 
+      deleteByFiche: function (intitule, organisation, callback) {
+        var sql = "DELETE FROM Offre WHERE rattachement = (SELECT id FROM Fiche WHERE intitule = ? AND organisation = ?)";
+        db.query(sql, [intitule, organisation], function (err, result) {
+          if (err) throw err;
+          callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
+        });
+      },
+      
+
              
       
 }
