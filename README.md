@@ -2,12 +2,9 @@
 
 ## A faire
 
-### - Mettre à jour la template HTML / CSS - > Quasiment fini
-- - Réaliser les pages créer_offre, créer_fiche, gestion_fiche, modifier_fiche, modifier_candidature, modifier_offre, modifier_utilisateur
-### - Réaliser les appels CRUD js du MVC -> EN COURS
-- - Réaliser les vues à l'aide des fonctions
-- - Identifier les usecases
-- - Créer les routes
-### - Réaliser les fonctions de test -> Bloqué
- - Dépend du reste
-  
+- Créer une table demande_recruteur
+- Créer une table demande administrateur
+- Récupérer les champs offre.liste_pieces et offre.nombre_pieces dans la vue Candidater
+- Les récupérer dans la route pour upload   
+- Un bouton de modification du profil et de suppression pour l'utilisateur
+- Faire en sorte que la suppression des fiches de poste supprime également les offres liées.
