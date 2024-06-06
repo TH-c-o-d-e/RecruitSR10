@@ -93,3 +93,37 @@ router.get('/usersbystatutcompte/:statut_compte', function (req, res, next) {
     res.render('usersList', { title: 'Liste des utilisateurs par statut de compte', users: result });
   });
 });
+
+var express = require('express');
+var router = express.Router();
+const userModel = require('../model/Utilisateur.js');
+
+/* GET users listing. */
+router.get('/userslist', function (req, res, next) {
+  const filter = req.query.filter;
+  const value = req.query.value;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'type_compte':
+      queryFunction = userModel.readByTypeCompte;
+      title = 'Liste des utilisateurs par type de compte';
+      break;
+    case 'statut_compte':
+      queryFunction = userModel.readByStatutCompte;
+      title = 'Liste des utilisateurs par statut de compte';
+      break;
+    default:
+      queryFunction = userModel.readAll;
+      title = 'Liste des utilisateurs';
+      break;
+  }
+
+  queryFunction(value, function (result) {
+    res.render('usersList', { title: title, users: result });
+  });
+});
+
+// ...

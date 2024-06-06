@@ -59,7 +59,7 @@ module.exports = {
       if (err) throw err;
       callback(results);
     });
-  },
+  },    
 
   readByDateValidite: function (date_validite, callback) {
     db.query("SELECT * FROM Offre WHERE date_validite = ?", [date_validite], function (err, results) {
