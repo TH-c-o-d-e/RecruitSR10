@@ -46,6 +46,29 @@ router.post('/createuser', function(req, res, next) {
     if (err) {
       res.status(500).send("Erreur lors de la création de l'utilisateur.");
     } else {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'logUTC',
+          pass: 'MOTDEPASSEUTC'
+        }
+      });
+
+      const mailOptions = {
+        from: 'MAIL UTC',
+        to: email,
+        subject: 'Bienvenue sur notre site',
+        text: 'Bonjour ' + newUser.nom + ',\n\nBienvenue sur notre site. Nous sommes ravis de vous compter parmi nos utilisateurs.\n\nCordialement,\nL équipe de notre site'
+      };
+
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+
       res.redirect("/userslist");
     }
   });
