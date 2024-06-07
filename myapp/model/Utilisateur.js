@@ -1,4 +1,6 @@
-const db = require('./connexion_db.js');
+const db = require('./connexion_bd.js');
+const offreModel = require('./Offre.js');
+
 
 module.exports = {
   read: function (id, callback) {
@@ -51,15 +53,23 @@ module.exports = {
     });
   },
 
+  
   delete: function (id, callback) {
-    var sql = "DELETE FROM Utilisateur WHERE id = ?";
-    db.query(sql, [id], function (err, result) {
-      if (err) throw err;
-      callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
+    // Supprimer les candidatures associées à l'utilisateur
+    candidatureModel.deleteByUtilisateur(id, function(err, result) {
+      if (err) {
+        throw err;
+      }
+      // Supprimer l'utilisateur
+      var sql = "DELETE FROM Utilisateur WHERE id = ?";
+      db.query(sql, [id], function (err, result) {
+        if (err) throw err;
+        callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
+      });
     });
   },
-
-  readByTypeCompte: function (type_compte, callback) {
+  
+ readByTypeCompte: function (type_compte, callback) {
     db.query("SELECT * FROM Utilisateur WHERE type_compte = ?", [type_compte], function (err, results) {
       if (err) throw err;
       callback(results);

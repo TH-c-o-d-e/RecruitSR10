@@ -117,9 +117,6 @@ router.get('/usersbystatutcompte/:statut_compte', function (req, res, next) {
   });
 });
 
-var express = require('express');
-var router = express.Router();
-const userModel = require('../model/Utilisateur.js');
 
 /* GET users listing. */
 router.get('/userslist', function (req, res, next) {

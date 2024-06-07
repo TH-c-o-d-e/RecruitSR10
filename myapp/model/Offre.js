@@ -1,4 +1,4 @@
-const db = require('./connexion_db.js');
+const db = require('./connexion_bd.js');
 
 module.exports = {
   read: function (siren, callback) {
