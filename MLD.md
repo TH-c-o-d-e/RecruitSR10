@@ -10,6 +10,6 @@ Offre(#numéro d'offre : int NOT NULL, rattachement => Fiche, 0 : inactif / 1 ac
 
 Candidature (#offre => Offre, #Candidat => Utilisateur, date : date, pieces : file)
 
-DemandeRecruteur(#Demandeur => Utilisateur : NOT NULL,  #Organisation=NOT NULL )
+DemandeRecruteur(#Demandeur => Utilisateur : NOT NULL,  #Organisation=> Organisation : NOT NULL )
 
 DemandeOrganisation(#Demandeur => Utilisateur : NOT NULL, date : date #Siren: int(9),  NULL Nom : char, Type : char : Siège social : char ) 
