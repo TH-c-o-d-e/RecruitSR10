@@ -6,7 +6,7 @@ Organisation( #Siren : int(9), NOT NULL Nom : char, Type : char : Siège social 
 
 Fiche( #Intitulé : char NOT NULL,# Organisation => Organisation.siren NOT NULL, Statut de poste : char, Responsable hiérarchique : char, lieu de mission : char, Rythme : char, fourchette : char)
 
-Offre(#numéro d'offre : int NOT NULL, rattachement => Fiche, 0 : inactif / 1 actif : char, Date de publication : date NOT NULL  Date de validité : int(10), Indications : char /file, liste de pieces : char, nombre de pieces : int)
+Offre(#numéro d'offre : int NOT NULL, rattachement => Fiche, 0 : inactif / 1 actif : char, Date de publication : date NOT NULL  Date de validité : date, Indications : char /file, liste de pieces : char, nombre de pieces : int)
 
 Candidature (#offre => Offre, #Candidat => Utilisateur, date : date, pieces : file)
 

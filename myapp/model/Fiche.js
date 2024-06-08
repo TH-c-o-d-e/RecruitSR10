@@ -66,6 +66,14 @@ module.exports = {
       if (err) throw err;
       callback(results);
     });
-  }
+  },
+  readAllSorted: function (sortBy, sortOrder, callback) {
+    var sql = "SELECT * FROM Fiche ORDER BY " + sortBy + " " + sortOrder;
+    db.query(sql, function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  
 };
 

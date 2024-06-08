@@ -49,3 +49,22 @@ CREATE TABLE `Organisation` (
   `Type` varchar(11) NOT NULL,
   `adresse` int(11) NOT NULL
 )
+
+CREATE TABLE DemandeRecruteur (
+  Demandeur INT NOT NULL,
+  Organisation INT NOT NULL,
+  PRIMARY KEY (Demandeur, Organisation),
+  FOREIGN KEY (Demandeur) REFERENCES Utilisateur(id),
+  FOREIGN KEY (Organisation) REFERENCES Organisation(Siren)
+);
+
+CREATE TABLE DemandeOrganisation (
+  Demandeur INT NOT NULL,
+  date DATE,
+  Siren INT(9),
+  Nom CHAR(255),
+  Type CHAR(255),
+  Siege_social CHAR(255),
+  PRIMARY KEY (Demandeur),
+  FOREIGN KEY (Demandeur) REFERENCES Utilisateur(id)
+);

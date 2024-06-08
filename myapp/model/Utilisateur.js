@@ -37,13 +37,22 @@ module.exports = {
     });
   },
 
-  create: function (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, callback) {
-    var sql = "INSERT INTO Utilisateur (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(sql, [id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation], function (err, result) {
+  create: function (email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, callback) {
+    // Récupérer l'ID maximum actuellement présent dans la base de données
+    var sql = "SELECT MAX(id) AS max_id FROM Utilisateur";
+    db.query(sql, function (err, results) {
       if (err) throw err;
-      callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
+      // Incrémenter l'ID maximum de 1 pour créer le nouvel utilisateur
+      var id = results[0].max_id + 1;
+      // Insérer le nouvel utilisateur dans la base de données
+      sql = "INSERT INTO Utilisateur (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      db.query(sql, [id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation], function (err, result) {
+        if (err) throw err;
+        callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
+      });
     });
   },
+  
 
   update: function (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, callback) {
     var sql = "UPDATE Utilisateur SET email = ?, mot_de_passe = ?, prenom = ?, nom = ?, coordonnees = ?, statut_compte = ?, type_compte = ?, organisation = ? WHERE id = ?";
@@ -82,4 +91,14 @@ module.exports = {
       callback(results);
     });
   },
+
+  readAllSorted: function (sortBy, sortOrder, callback) {
+    var sql = "SELECT * FROM Utilisateur ORDER BY " + sortBy + " " + sortOrder;
+    db.query(sql, function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  
+  
 }

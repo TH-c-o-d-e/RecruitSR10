@@ -2,12 +2,12 @@ var express = require('express');
 var router = express.Router();
 const userModel = require('../model/Utilisateur.js');
 
-/* GET users listing. */
+/* GET users listing. 
 router.get('/userslist', function (req, res, next) {
   userModel.readAll(function (result) {
     res.render('usersList', { title: 'Liste des utilisateurs', users: result });
   });
-});
+});*/
 
 /* On met à jour un utilisateur */
 router.put('/edituser', function (req, res, next) {
@@ -146,4 +146,54 @@ router.get('/userslist', function (req, res, next) {
   });
 });
 
-// ...
+/* GET users listing sorted */
+router.get('/userslist/sort/:sortBy/:sortOrder', function (req, res, next) {
+  const sortBy = req.params.sortBy;
+  const sortOrder = req.params.sortOrder;
+
+  userModel.readAllSorted(sortBy, sortOrder, function (result) {
+    res.render('usersList', { title: 'Liste des utilisateurs triés par ' + sortBy, users: result });
+  });
+});
+
+/* GET users listing with filter and sort */
+router.get('/userslist', function (req, res, next) {
+  const filter = req.query.filter;
+  const value = req.query.value;
+  const sortBy = req.query.sortBy;
+  const sortOrder = req.query.sortOrder;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'type_compte':
+      queryFunction = userModel.readByTypeCompte;
+      title = 'Liste des utilisateurs par type de compte';
+      break;
+    case 'statut_compte':
+      queryFunction = userModel.readByStatutCompte;
+      title = 'Liste des utilisateurs par statut de compte';
+      break;
+    default:
+      queryFunction = userModel.readAll;
+      title = 'Liste des utilisateurs';
+      break;
+  }
+
+  queryFunction(value, function (result) {
+    if (sortBy && sortOrder) {
+      result.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return sortOrder === 'asc' ? -1 : 1;
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return sortOrder === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+      title += ' triés par ' + sortBy;
+    }
+    res.render('usersList', { title: title, users: result });
+  });
+});

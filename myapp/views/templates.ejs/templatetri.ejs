@@ -1,0 +1,41 @@
+<h1><%= title %></h1>
+
+<form action="/offreslist" method="GET">
+  <input type="text" name="search" placeholder="Rechercher une offre">
+  <button type="submit">Rechercher</button>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th><a href="/offreslist?sortBy=numero_offre&sortOrder=asc">Numéro d'offre</a></th>
+      <th><a href="/offreslist?sortBy=rattachement&sortOrder=asc">Rattachement</a></th>
+      <th><a href="/offreslist?sortBy=etat&sortOrder=asc">État</a></th>
+      <th><a href="/offreslist?sortBy=date_publication&sortOrder=asc">Date de publication</a></th>
+      <th><a href="/offreslist?sortBy=date_validite&sortOrder=asc">Date de validité</a></th>
+      <th><a href="/offreslist?sortBy=intitule&sortOrder=asc">Intitulé de fiche</a></th>
+      <th><a href="/offreslist?sortBy=organisation&sortOrder=asc">Organisation de fiche</a></th>
+      <th><a href="/offreslist?sortBy=statut_poste&sortOrder=asc">Statut de poste de fiche</a></th>
+      <th><a href="/offreslist?sortBy=lieu_mission&sortOrder=asc">Lieu de mission de fiche</a></th>
+      <th><a href="/offreslist?sortBy=fourchette&sortOrder=asc">Fourchette de salaire de fiche</a></th>
+      <th><a href="/offreslist?sortBy=rythme&sortOrder=asc">Rythme de fiche</a></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% offres.forEach(function(offre) { %>
+    <tr>
+      <td><%= offre.numero_offre %></td>
+      <td><%= offre.rattachement %></td>
+      <td><%= offre.etat %></td>
+      <td><%= offre.date_publication %></td>
+      <td><%= offre.date_validite %></td>
+      <td><%= offre.rattachement %></td>
+      <td><%= offre.organisation %></td>
+      <td><%= offre.statut_poste %></td>
+      <td><%= offre.lieu_mission %></td>
+      <td><%= offre.fourchette %></td>
+      <td><%= offre.rythme %></td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>
