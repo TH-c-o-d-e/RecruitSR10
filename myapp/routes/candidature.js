@@ -121,12 +121,13 @@ router.get('/candidatureslist/sort/:sortBy/:sortOrder', function (req, res, next
   });
 });
 
-/* GET candidatures listing with filter and sort */
+/* GET candidatures listing with filter, sort and search */
 router.get('/candidatureslist', function (req, res, next) {
   const filter = req.query.filter;
   const value = req.query.value;
   const sortBy = req.query.sortBy;
   const sortOrder = req.query.sortOrder;
+  const search = req.query.search;
 
   let queryFunction;
   let title;
@@ -145,12 +146,12 @@ router.get('/candidatureslist', function (req, res, next) {
       title = 'Liste des candidatures par date';
       break;
     default:
-      queryFunction = candidatureModel.readAll;
+      queryFunction = candidatureModel.search;
       title = 'Liste des candidatures';
       break;
   }
 
-  queryFunction(value, function (result) {
+  queryFunction(value || search, function (result) {
     if (sortBy && sortOrder) {
       result.sort((a, b) => {
         if (a[sortBy] < b[sortBy]) {
@@ -166,6 +167,7 @@ router.get('/candidatureslist', function (req, res, next) {
     res.render('candidaturesList', { title: title, candidatures: result });
   });
 });
+
 
 
 

@@ -99,6 +99,13 @@ module.exports = {
       callback(results);
     });
   },
+
+  search: function (query, callback) {
+    db.query("SELECT * FROM Utilisateur WHERE id LIKE ? OR email LIKE ? OR prenom LIKE ? OR nom LIKE ? OR coordonnees LIKE ? OR statut_compte LIKE ? OR type_compte LIKE ? OR organisation LIKE ?", ['%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%'], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
   
   
 }

@@ -96,12 +96,13 @@ router.get('/organisationslist/sort/:sortBy/:sortOrder', function (req, res, nex
   });
 });
 
-/* GET fiches listing with filter and sort */
+/* GET fiches listing with filter, sort and search */
 router.get('/ficheslist', function (req, res, next) {
   const filter = req.query.filter;
   const value = req.query.value;
   const sortBy = req.query.sortBy;
   const sortOrder = req.query.sortOrder;
+  const search = req.query.search;
 
   let queryFunction;
   let title;
@@ -132,12 +133,12 @@ router.get('/ficheslist', function (req, res, next) {
       title = 'Liste des fiches par rythme';
       break;
     default:
-      queryFunction = ficheModel.readAll;
+      queryFunction = ficheModel.search;
       title = 'Liste des fiches';
       break;
   }
 
-  queryFunction(value, function (result) {
+  queryFunction(value || search, function (result) {
     if (sortBy && sortOrder) {
       result.sort((a, b) => {
         if (a[sortBy] < b[sortBy]) {

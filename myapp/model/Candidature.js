@@ -67,5 +67,13 @@ module.exports = {
     });
   },
   
+  search: function (query, callback) {
+    db.query("SELECT * FROM Candidature WHERE offre LIKE ? OR candidat LIKE ? OR date LIKE ? OR pieces LIKE ?", ['%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%'], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  
+
 };
 
