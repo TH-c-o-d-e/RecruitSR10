@@ -1,9 +1,23 @@
 # RecruitSR10
 
+
+## URGENT
+ 
+ - Ajouter une offre pour le recruteur @rayan-nls
+ - Ajouter une fiche et gérer les fiches
+ - Ajouter une date de publication dans offre
+ -  
+
+
+## Liste des vues 
+
+- Vue historique des demandes d'organisation
+
+
 ## A faire
 
 - Créer une table demande_recruteur
-- Créer une table demande administrateur
+- Créer une table demande organisation
 - Récupérer les champs offre.liste_pieces et offre.nombre_pieces dans la vue Candidater
 - Les récupérer dans la route pour upload   
 - Un bouton de modification du profil et de suppression pour l'utilisateur
@@ -14,4 +28,11 @@
 - Le recruteur doit pouvoir gérer l'organisation (recycler le formulaire)
 - Mail à  envoyer aussi pour les changements de droits.
 - Corriger le modèle offre
-- 
+- Créer une route vue candidat -> recruteur et inversment
+- Créer une fonction de recherche d'un utilisateur
+- Chercher comment récupérer le contenu sélectionné
+- Faire un filtre pour les offres expirées pour l'utilisateur classique
+- Filtre  : les fourchettes de salaire, Lieu.
+- Tri : fourchette salaire, date de publication. 
+- Valider / refuser une candidature (envoie un mail)
+- Valider / refuser une demande d'organisation (ne supprime pas les demandes) ou de recruteur
