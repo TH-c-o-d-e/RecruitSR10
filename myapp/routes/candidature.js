@@ -171,3 +171,4 @@ router.get('/candidatureslist', function (req, res, next) {
 
 
 
+module.exports = router;

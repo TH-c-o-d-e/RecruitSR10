@@ -154,3 +154,5 @@ router.get('/ficheslist', function (req, res, next) {
     res.render('fichesList', { title: title, fiches: result });
   });
 });
+
+module.exports = router;

@@ -198,3 +198,6 @@ router.get('/userslist', function (req, res, next) {
     res.render('usersList', { title: title, users: result });
   });
 });
+
+
+module.exports = router;

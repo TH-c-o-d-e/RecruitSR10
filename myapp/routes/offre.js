@@ -205,3 +205,6 @@ router.get('/offreslist', function (req, res, next) {
     res.render('offresList', { title: title, offres: result });
   });
 });
+
+
+module.exports = router;
