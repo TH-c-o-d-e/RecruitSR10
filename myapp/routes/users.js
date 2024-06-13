@@ -9,7 +9,7 @@ router.get('/userslist', function (req, res, next) {
   });
 });*/
 
-/* On met à jour un utilisateur */
+/* nOn met à jour un utilisateur */
 router.put('/edituser', function (req, res, next) {
   const id = req.body.id;
   const email = req.body.email;
@@ -231,6 +231,67 @@ router.post('/inscription', function(req, res, next) {
 });
 
 
+const express = require('express');
+const router = express.Router();
+const utilisateurModel = require('../models/utilisateur');
+
+// Middleware pour vérifier si l'utilisateur est connecté
+function isAuthenticated(req, res, next) {
+  if (req.session && req.session.user) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
+// Middleware pour vérifier le type de compte de l'utilisateur
+function checkAccountType(type) {
+  return function(req, res, next) {
+    if (req.session.role === type) {
+      return next();
+    }
+    res.redirect('/');
+  }
+}
+
+// Route pour la connexion d'un utilisateur
+router.post('/login', function(req, res, next) {
+  const email = req.body.email;
+  const mot_de_passe = req.body.mot_de_passe;
+
+  utilisateurModel.areValid(email, mot_de_passe, function(result) {
+    if (result) {
+      // Connexion réussie
+      req.session.user = result.email;
+      req.session.role = result.type_compte;
+      if (result.type_compte === 0) {
+        res.redirect('/accueil_candidat');
+      } else if (result.type_compte === 2) {
+        res.redirect('/accueil_recruteur');
+      } else if (result.type_compte === 1) {
+        res.redirect('/accueil_administrateur');
+      }
+    } else {
+      // Connexion échouée
+      req.flash('error', 'Email et/ou mot de passe invalide');
+      res.redirect('/login');
+    }
+  });
+});
+
+// Route pour l'accueil candidat
+router.get('/accueil_candidat', isAuthenticated, checkAccountType(0), function(req, res, next) {
+  // Code pour l'affichage de l'accueil candidat
+});
+
+// Route pour l'accueil recruteur
+router.get('/accueil_recruteur', isAuthenticated, checkAccountType(2), function(req, res, next) {
+  // Code pour l'affichage de l'accueil recruteur
+});
+
+// Route pour l'accueil administrateur
+router.get('/accueil_administrateur', isAuthenticated, checkAccountType(1), function(req, res, next) {
+  // Code pour l'affichage de l'accueil administrateur
+});
 
 
 module.exports = router;
