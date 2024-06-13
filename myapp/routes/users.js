@@ -200,4 +200,37 @@ router.get('/userslist', function (req, res, next) {
 });
 
 
+
+// Route pour l'inscription d'un utilisateur
+router.post('/inscription', function(req, res, next) {
+  const nom = req.body.nom;
+  const prenom = req.body.prenom;
+  const email = req.body.email;
+  const date_naissance = req.body.date_naissance;
+  const telephone = req.body.telephone;
+  const mot_de_passe = req.body.mot_de_passe;
+  const type_compte = 0;
+  const statut_compte = 1;
+
+  // Vérification de la complexité du mot de passe
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+  if (!regex.test(mot_de_passe)) {
+    req.flash('error', 'Le mot de passe doit comporter au moins 12 caractères, dont des majuscules, des minuscules, des chiffres et des caractères spéciaux parmi @$!%*?&');
+    res.redirect('/inscription');
+    return;
+  }
+
+  utilisateurModel.create(nom, prenom, email, date_naissance, telephone, mot_de_passe, type_compte, statut_compte, function(result) {
+    if (result) {
+      res.redirect('/utilisateurs');
+    } else {
+      req.flash('error', 'L\' inscription a échoué !' );
+      res.redirect('/inscription')
+    }
+  });
+});
+
+
+
+
 module.exports = router;

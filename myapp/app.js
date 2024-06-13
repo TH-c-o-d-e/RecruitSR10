@@ -31,8 +31,9 @@ app.use('/organisation', organisationRouter);
 app.use("/fiche", ficheRouter);
 app.use("/offre", offreRouter)
 app.use("/candidature", candidatureRouter);
-app.use("./demanderecuteur", demandeRecruteurRouter);
-app.use("./demandeorganisation", demandeOrganisationRouter);
+app.use("/demanderecuteur", demandeRecruteurRouter);
+app.use("/demandeorganisation", demandeOrganisationRouter);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
