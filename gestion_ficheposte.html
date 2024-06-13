@@ -12,16 +12,19 @@
   <body>
     <div class="container mt-5">
       <header class="row text-center"><h1>Recrutement</h1></header>
+
       <nav
         class="nav nav-pills navbar-expand-lg navbar-light bg-light mt-2 mb-2"
       >
         <a class="nav-item nav-link mx-2" href="accueil_recruteur.html"
           >Accueil</a
         >
-        <a class="nav-item nav-link active mx-2" href="gestion_offres.html"
+        <a class="nav-item nav-link mx-2" href="gestion_offres.html"
           >Gestion des offres</a
         >
-        <a class="nav-item nav-link mx-2" href="gestion_ficheposte.html"
+        <a
+          class="nav-item nav-link active mx-2"
+          href="gestion_fiches_de_poste.html"
           >Gestion des fiches de poste</a
         >
       </nav>
@@ -29,16 +32,16 @@
       <div class="row mb-3">
         <div class="col-sm-12 d-flex justify-content-end">
           <a
-            href="nouvelle_offre.html"
+            href="formulaire_ficheposte.html"
             class="btn btn-success mx-2"
-            id="new-offer"
-            >Nouvelle offre</a
+            id="new-post"
+            >Nouvelle fiche de poste</a
           >
-          <button class="btn btn-warning mx-2" id="edit-offer">
-            Modifier offre
+          <button class="btn btn-warning mx-2" id="edit-post">
+            Modifier fiche de poste
           </button>
-          <button class="btn btn-danger mx-2" id="delete-offer">
-            Supprimer offre
+          <button class="btn btn-danger mx-2" id="delete-post">
+            Supprimer fiche de poste
           </button>
         </div>
       </div>
@@ -48,6 +51,7 @@
           <div class="col-sm-6 mb-3">
             <form class="form-group input-group mb-2">
               <input
+                label="Rechercher"
                 type="search"
                 placeholder="Entrer le terme à rechercher..."
                 class="form-control mx-3"
@@ -57,9 +61,11 @@
               </div>
             </form>
             <select class="form-select" aria-label="Trier par…">
-              <option value="1">Date de publication</option>
-              <option value="2">etc...</option>
-              <option value="3">Salaire</option>
+              <option value="1">Intitulé</option>
+              <option value="2">Statut de poste</option>
+              <option value="3">Lieu de mission</option>
+              <option value="4">Rythme</option>
+              <option value="5">Fourchette de salaire</option>
             </select>
           </div>
 
@@ -67,25 +73,25 @@
             <thead>
               <tr>
                 <th><input type="radio" disabled /></th>
-                <th>ID</th>
                 <th>Intitulé</th>
-                <th>Date candidature</th>
-                <th>Date limite</th>
-                <th>État</th>
-                <th>Voir candidatures</th>
+                <th>Statut de poste</th>
+                <th>Responsable hiérarchique</th>
+                <th>Lieu de mission</th>
+                <th>Rythme</th>
+                <th>Fourchette de salaire</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <th><input name="offre" type="radio" /></th>
-                <td>1</td>
-                <td>Ingénieur Web</td>
-                <td></td>
-                <td></td>
-                <td>Expirée</td>
-                <td><a href="candidatures_offre.html">Voir candidatures</a></td>
+                <th><input name="post" type="radio" /></th>
+                <td>Développeur Web</td>
+                <td>CDI</td>
+                <td>Jean Dupont</td>
+                <td>Paris</td>
+                <td>Temps plein</td>
+                <td>40k-50k</td>
               </tr>
-              <!-- Ajouter d'autres offres ici -->
+              <!-- Ajouter d'autres fiches de poste ici -->
             </tbody>
           </table>
           <ul class="pagination">
@@ -95,13 +101,20 @@
             <li class="page-item active">
               <a class="page-link" href="#">1</a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">3</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
           </ul>
         </div>
       </div>
     </div>
+
     <footer></footer>
   </body>
 </html>
