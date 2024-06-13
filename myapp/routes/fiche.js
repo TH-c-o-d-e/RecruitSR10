@@ -2,12 +2,12 @@ var express = require('express');
 var router = express.Router();
 const ficheModel = require('../model/Fiche.js');
 
-/* GET fiches listing. */
-router.get('/ficheslist', function (req, res, next) {
-  ficheModel.readAll(function (result) {
-    res.render('fichesList', { title: 'Liste des fiches', fiches: result });
-  });
-});
+// /* GET fiches listing. */
+// router.get('/ficheslist', function (req, res, next) {
+//   ficheModel.readAll(function (result) {
+//     res.render('fichesList', { title: 'Liste des fiches', fiches: result });
+//   });
+// });
 
 /* On met à jour une fiche */
 router.put('/editfiche', function (req, res, next) {
@@ -85,3 +85,74 @@ router.get('/fichesbystatutposte/:statut_poste', function (req, res, next) {
     res.render('fichesList', { title: 'Liste des fiches par statut de poste', fiches: result });
   });
 });
+
+/* GET organisations listing sorted */
+router.get('/organisationslist/sort/:sortBy/:sortOrder', function (req, res, next) {
+  const sortBy = req.params.sortBy;
+  const sortOrder = req.params.sortOrder;
+
+  organisationModel.readAllSorted(sortBy, sortOrder, function (result) {
+    res.render('organisationsList', { title: 'Liste des organisations triées par ' + sortBy, organisations: result });
+  });
+});
+
+/* GET fiches listing with filter, sort and search */
+router.get('/ficheslist', function (req, res, next) {
+  const filter = req.query.filter;
+  const value = req.query.value;
+  const sortBy = req.query.sortBy;
+  const sortOrder = req.query.sortOrder;
+  const search = req.query.search;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'intitule':
+      queryFunction = ficheModel.readByIntitule;
+      title = 'Liste des fiches par intitulé';
+      break;
+    case 'organisation':
+      queryFunction = ficheModel.readByOrganisation;
+      title = 'Liste des fiches par organisation';
+      break;
+    case 'statut_poste':
+      queryFunction = ficheModel.readByStatutPoste;
+      title = 'Liste des fiches par statut de poste';
+      break;
+    case 'lieu_mission':
+      queryFunction = ficheModel.readByLieuMission;
+      title = 'Liste des fiches par lieu de mission';
+      break;
+    case 'fourchette':
+      queryFunction = ficheModel.readByFourchette;
+      title = 'Liste des fiches par fourchette de salaire';
+      break;
+    case 'rythme':
+      queryFunction = ficheModel.readByRythme;
+      title = 'Liste des fiches par rythme';
+      break;
+    default:
+      queryFunction = ficheModel.search;
+      title = 'Liste des fiches';
+      break;
+  }
+
+  queryFunction(value || search, function (result) {
+    if (sortBy && sortOrder) {
+      result.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return sortOrder === 'asc' ? -1 : 1;
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return sortOrder === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+      title += ' triées par ' + sortBy;
+    }
+    res.render('fichesList', { title: title, fiches: result });
+  });
+});
+
+module.exports = router;

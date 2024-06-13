@@ -66,5 +66,40 @@ module.exports = {
       if (err) throw err;
       callback(results);
     });
-  }
+  },
+  readAllSorted: function (sortBy, sortOrder, callback) {
+    var sql = "SELECT * FROM Fiche ORDER BY " + sortBy + " " + sortOrder;
+    db.query(sql, function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  readByLieuMission: function (lieu_mission, callback) {
+    db.query("SELECT * FROM Fiche WHERE lieu_mission = ?", [lieu_mission], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  
+  readByFourchette: function (fourchette, callback) {
+    db.query("SELECT * FROM Fiche WHERE fourchette = ?", [fourchette], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  
+  readByRythme: function (rythme, callback) {
+    db.query("SELECT * FROM Fiche WHERE rythme = ?", [rythme], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  search: function (query, callback) {
+    db.query("SELECT * FROM Fiche WHERE intitule LIKE ? OR organisation LIKE ? OR statut_poste LIKE ? OR responsable LIKE ? OR lieu_mission LIKE ? OR rythme LIKE ? OR fourchette LIKE ?", ['%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%'], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  
 };
+

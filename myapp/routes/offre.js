@@ -2,12 +2,13 @@ var express = require('express');
 var router = express.Router();
 const offreModel = require('../model/Offre.js');
 
-/* GET offres listing. */
-router.get('/offreslist', function (req, res, next) {
-  offreModel.readAll(function (result) {
-    res.render('offresList', { title: 'Liste des offres', offres: result });
-  });
-});
+// /* GET offres listing.*/ 
+// router.get('/offreslist', function (req, res, next) {
+//   offreModel.readAll(function (result) {
+//     res.render('offresList', { title: 'Liste des offres', offres: result });
+//   });
+// });
+
 
 /* On met à jour une offre */
 router.put('/editoffre', function (req, res, next) {
@@ -84,3 +85,126 @@ router.get('/offresbydatevalidite/:date_validite', function (req, res, next) {
     res.render('offresList', { title: 'Liste des offres par date de validité', offres: result });
   });
 });
+
+/* GET offres by filter */
+router.get('/offresbyfilter/:filter/:value', function (req, res, next) {
+  const filter = req.params.filter;
+  const value = req.params.value;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'rattachement':
+      queryFunction = offreModel.readByRattachement;
+      title = 'Liste des offres par rattachement';
+      break;
+    case 'etat':
+      queryFunction = offreModel.readByEtat;
+      title = 'Liste des offres par état';
+      break;
+    case 'date_publication':
+      queryFunction = offreModel.readByDatePublication;
+      title = 'Liste des offres par date de publication';
+      break;
+    case 'date_validite':
+      queryFunction = offreModel.readByDateValidite;
+      title = 'Liste des offres par date de validité';
+      break;
+    default:
+      res.status(400).send('Filtre non valide');
+      return;
+  }
+
+  queryFunction(value, function (result) {
+    res.render('offresList', { title: title, offres: result });
+  });
+});
+
+/* GET offres listing sorted */
+router.get('/offreslist/sort/:sortBy/:sortOrder', function (req, res, next) {
+  const sortBy = req.params.sortBy;
+  const sortOrder = req.params.sortOrder;
+
+  offreModel.readAllSorted(sortBy, sortOrder, function (result) {
+    res.render('offresList', { title: 'Liste des offres triées par ' + sortBy, offres: result });
+  });
+});
+
+/* GET offres listing with filter, sort and search */
+router.get('/offreslist', function (req, res, next) {
+  const filter = req.query.filter;
+  const value = req.query.value;
+  const sortBy = req.query.sortBy;
+  const sortOrder = req.query.sortOrder;
+  const search = req.query.search;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'rattachement':
+      queryFunction = offreModel.readByRattachement;
+      title = 'Liste des offres par rattachement';
+      break;
+    case 'etat':
+      queryFunction = offreModel.readByEtat;
+      title = 'Liste des offres par état';
+      break;
+    case 'date_publication':
+      queryFunction = offreModel.readByDatePublication;
+      title = 'Liste des offres par date de publication';
+      break;
+    case 'date_validite':
+      queryFunction = offreModel.readByDateValidite;
+      title = 'Liste des offres par date de validité';
+      break;
+    case 'intitule':
+      queryFunction = offreModel.readByIntitule;
+      title = 'Liste des offres par intitulé de fiche';
+      break;
+    case 'organisation':
+      queryFunction = offreModel.readByOrganisation;
+      title = 'Liste des offres par organisation de fiche';
+      break;
+    case 'statut_poste':
+      queryFunction = offreModel.readByStatutPoste;
+      title = 'Liste des offres par statut de poste de fiche';
+      break;
+    case 'lieu_mission':
+      queryFunction = offreModel.readByLieuMission;
+      title = 'Liste des offres par lieu de mission de fiche';
+      break;
+    case 'fourchette':
+      queryFunction = offreModel.readByFourchette;
+      title = 'Liste des offres par fourchette de salaire de fiche';
+      break;
+    case 'rythme':
+      queryFunction = offreModel.readByRythme;
+      title = 'Liste des offres par rythme de fiche';
+      break;
+    default:
+      queryFunction = offreModel.search;
+      title = 'Liste des offres';
+      break;
+  }
+
+  queryFunction(value || search, function (result) {
+    if (sortBy && sortOrder) {
+      result.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return sortOrder === 'asc' ? -1 : 1;
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return sortOrder === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+      title += ' triées par ' + sortBy;
+    }
+    res.render('offresList', { title: title, offres: result });
+  });
+});
+
+
+module.exports = router;

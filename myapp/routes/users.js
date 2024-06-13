@@ -2,12 +2,12 @@ var express = require('express');
 var router = express.Router();
 const userModel = require('../model/Utilisateur.js');
 
-/* GET users listing. */
+/* GET users listing. 
 router.get('/userslist', function (req, res, next) {
   userModel.readAll(function (result) {
     res.render('usersList', { title: 'Liste des utilisateurs', users: result });
   });
-});
+});*/
 
 /* On met à jour un utilisateur */
 router.put('/edituser', function (req, res, next) {
@@ -46,6 +46,29 @@ router.post('/createuser', function(req, res, next) {
     if (err) {
       res.status(500).send("Erreur lors de la création de l'utilisateur.");
     } else {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'logUTC',
+          pass: 'MOTDEPASSEUTC'
+        }
+      });
+
+      const mailOptions = {
+        from: 'MAIL UTC',
+        to: email,
+        subject: 'Bienvenue sur notre site',
+        text: 'Bonjour ' + newUser.nom + ',\n\nBienvenue sur notre site. Nous sommes ravis de vous compter parmi nos utilisateurs.\n\nCordialement,\nL équipe de notre site'
+      };
+
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+
       res.redirect("/userslist");
     }
   });
@@ -94,9 +117,6 @@ router.get('/usersbystatutcompte/:statut_compte', function (req, res, next) {
   });
 });
 
-var express = require('express');
-var router = express.Router();
-const userModel = require('../model/Utilisateur.js');
 
 /* GET users listing. */
 router.get('/userslist', function (req, res, next) {
@@ -126,4 +146,58 @@ router.get('/userslist', function (req, res, next) {
   });
 });
 
-// ...
+/* GET users listing sorted */
+router.get('/userslist/sort/:sortBy/:sortOrder', function (req, res, next) {
+  const sortBy = req.params.sortBy;
+  const sortOrder = req.params.sortOrder;
+
+  userModel.readAllSorted(sortBy, sortOrder, function (result) {
+    res.render('usersList', { title: 'Liste des utilisateurs triés par ' + sortBy, users: result });
+  });
+});
+
+/* GET users listing with filter, sort and search */
+router.get('/userslist', function (req, res, next) {
+  const filter = req.query.filter;
+  const value = req.query.value;
+  const sortBy = req.query.sortBy;
+  const sortOrder = req.query.sortOrder;
+  const search = req.query.search;
+
+  let queryFunction;
+  let title;
+
+  switch (filter) {
+    case 'type_compte':
+      queryFunction = userModel.readByTypeCompte;
+      title = 'Liste des utilisateurs par type de compte';
+      break;
+    case 'statut_compte':
+      queryFunction = userModel.readByStatutCompte;
+      title = 'Liste des utilisateurs par statut de compte';
+      break;
+    default:
+      queryFunction = userModel.search;
+      title = 'Liste des utilisateurs';
+      break;
+  }
+
+  queryFunction(value || search, function (result) {
+    if (sortBy && sortOrder) {
+      result.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return sortOrder === 'asc' ? -1 : 1;
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return sortOrder === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+      title += ' triés par ' + sortBy;
+    }
+    res.render('usersList', { title: title, users: result });
+  });
+});
+
+
+module.exports = router;

@@ -1,70 +1,70 @@
-const db = require('./connexion_db.js');
+const db = require('./connexion_bd.js');
 
 module.exports = {
-  read: function (numero_offre, callback) {
-    db.query("SELECT * FROM Offre WHERE numero_offre = ?", numero_offre, function (err, results) {
+  read: function (siren, callback) {
+    db.query("SELECT * FROM Organisation WHERE siren = ?", siren, function (err, results) {
       if (err) throw err;
       callback(results);
     });
   },
 
   readAll: function (callback) {
-    db.query("SELECT * FROM Offre", function (err, results) {
+    db.query("SELECT * FROM Organisation", function (err, results) {
       if (err) throw err;
       callback(results);
     });
   },
 
-  create: function (numero_offre, rattachement, etat, date_validite, indications, liste_pieces, nombre_pieces, callback) {
-    var sql = "INSERT INTO Offre (numero_offre, rattachement, etat, date_validite, indications, liste_pieces, nombre_pieces) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    db.query(sql, [numero_offre, rattachement, etat, date_validite, indications, liste_pieces, nombre_pieces], function (err, result) {
+  create: function (siren, nom, type, siege_social, callback) {
+    var sql = "INSERT INTO Organisation (siren, nom, type, siege_social) VALUES (?, ?, ?, ?)";
+    db.query(sql, [siren, nom, type, siege_social], function (err, result) {
       if (err) throw err;
       callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
     });
   },
 
-  update: function (numero_offre, rattachement, etat, date_validite, indications, liste_pieces, nombre_pieces, callback) {
-    var sql = "UPDATE Offre SET rattachement = ?, etat = ?, date_validite = ?, indications = ?, liste_pieces = ?, nombre_pieces = ? WHERE numero_offre = ?";
-    db.query(sql, [rattachement, etat, date_validite, indications, liste_pieces, nombre_pieces, numero_offre], function (err, result) {
+  update: function (siren, nom, type, siege_social, callback) {
+    var sql = "UPDATE Organisation SET nom = ?, type = ?, siege_social = ? WHERE siren = ?";
+    db.query(sql, [nom, type, siege_social, siren], function (err, result) {
       if (err) throw err;
       callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
     });
   },
 
-  delete: function (numero_offre, callback) {
-    var sql = "DELETE FROM Offre WHERE numero_offre = ?";
-    db.query(sql, [numero_offre], function (err, result) {
+  delete: function (siren, callback) {
+    var sql = "DELETE FROM Organisation WHERE siren = ?";
+    db.query(sql, [siren], function (err, result) {
       if (err) throw err;
       callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
     });
   },
 
-  deleteByFiche: function (intitule, organisation, callback) {
-    var sql = "DELETE FROM Offre WHERE rattachement = (SELECT id FROM Fiche WHERE intitule = ? AND organisation = ?)";
-    db.query(sql, [intitule, organisation], function (err, result) {
-      if (err) throw err;
-      callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
-    });
-  },
-
-  readByRattachement: function (rattachement, callback) {
-    db.query("SELECT * FROM Offre WHERE rattachement = ?", [rattachement], function (err, results) {
+  readByType: function (type, callback) {
+    db.query("SELECT * FROM Organisation WHERE type = ?", [type], function (err, results) {
       if (err) throw err;
       callback(results);
     });
   },
 
-  readByEtat: function (etat, callback) {
-    db.query("SELECT * FROM Offre WHERE etat = ?", [etat], function (err, results) {
+  readBySiegeSocial: function (siege_social, callback) {
+    db.query("SELECT * FROM Organisation WHERE siege_social = ?", [siege_social], function (err, results) {
       if (err) throw err;
       callback(results);
     });
-  },    
+  },
 
-  readByDateValidite: function (date_validite, callback) {
-    db.query("SELECT * FROM Offre WHERE date_validite = ?", [date_validite], function (err, results) {
+  readAllSorted: function (sortBy, sortOrder, callback) {
+    var sql = "SELECT * FROM Organisation ORDER BY " + sortBy + " " + sortOrder;
+    db.query(sql, function (err, results) {
       if (err) throw err;
       callback(results);
     });
-  }
+  },
+  search: function (query, callback) {
+    db.query("SELECT * FROM Organisation WHERE Siren LIKE ? OR Nom LIKE ? OR Type LIKE ? OR Siege_social LIKE ?", ['%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%'], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+  
 };
