@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const offreModel = require('../models/offreModel');
-const utilisateurModel = require('../models/utilisateurModel');
+const offreModel = require('../model/Offre.js');
+const utilisateurModel = require('../model/Utilisateur.js');
 
 // Route pour afficher la liste des offres avec recherche, filtre et tri
 router.get('/offres', function(req, res, next) {

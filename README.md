@@ -38,5 +38,4 @@
 - Un bouton de modification du profil et de suppression pour l'utilisateur
 - Gérer le téléchargement et l'Upload 
 - Le recruteur doit pouvoir gérer l'organisation (recycler le formulaire) 
-- Créer une route vue candidat -> recruteur et inversement
 - Chercher comment récupérer le contenu sélectionné

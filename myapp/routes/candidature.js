@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const candidatureModel = require('../model/Candidature.js');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 /* GET all candidatures, with optional filtering, sorting, and searching */
 router.get('/candidatureslist', function (req, res, next) {
@@ -211,4 +214,45 @@ router.put('/refuser', (req, res) => {
     });
   });
 });
+
+const app = express();
+
+// Configuration de Multer pour gérer les téléchargements de fichiers
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const candidatFolder = path.join(__dirname, 'uploads', req.user.id.toString());
+    const candidatureFolder = path.join(candidatFolder, req.body.offre.toString());
+    
+    // Créer les dossiers s'ils n'existent pas déjà
+    if (!fs.existsSync(candidatFolder)) {
+      fs.mkdirSync(candidatFolder);
+    }
+    if (!fs.existsSync(candidatureFolder)) {
+      fs.mkdirSync(candidatureFolder);
+    }
+    
+    cb(null, candidatureFolder);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Utiliser le nom original du fichier
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// Middleware pour parser les données POST
+app.use(express.urlencoded({ extended: true }));
+
+// Exemple de route pour télécharger les pièces
+app.post('/upload', upload.array('pieces'), function(req, res) {
+  res.send('Téléchargement des pièces réussi.');
+});
+
+// Port d'écoute du serveur
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Serveur démarré sur le port ${port}`);
+});
+
+
 module.exports = router;
