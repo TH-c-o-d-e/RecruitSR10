@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <title>Utilisateur</title>
+    <title>Administration du Site</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="test.css" />
     <link
@@ -11,23 +11,25 @@
   </head>
   <body>
     <div class="container mt-5">
-      <div class="row">
-        <header class="row text-center"><h1>Administration du Site</h1></header>
-      </div>
+      <header class="row text-center">
+        <h1>Administration du Site</h1>
+      </header>
 
       <nav
         class="nav nav-pills navbar-expand-lg navbar-light bg-light mt-2 mb-2"
       >
-        <a class="nav-item nav-link mx-2" href="/accueil_administrateur"
+        <a class="nav-item nav-link mx-2" href="accueil_administrateur.html"
           >Accueil</a
         >
-        <a class="nav-item nav-link mx-2" href="/gestion_utilisateurs"
+        <a class="nav-item nav-link mx-2" href="gestion_utilisateurs.html"
           >Gestion des utilisateurs</a
         >
-        <a class="nav-item nav-link active mx-2" href="/gestion_organisations"
+        <a
+          class="nav-item nav-link active mx-2"
+          href="gestion_organisations.html"
           >Gestion des organisations</a
         >
-        <a class="nav-item nav-link mx-2" href="/gestion_recruteurs"
+        <a class="nav-item nav-link mx-2" href="gestion_recruteurs.html"
           >Gestion des recruteurs</a
         >
       </nav>
@@ -42,80 +44,38 @@
                 <th>Nom</th>
                 <th>Type</th>
                 <th>Siege Social</th>
-                <th>Valider</th>
-                <th>Refuser</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <% organisations.forEach((organisation, index) => { %>
-              <tr class="page <%= Math.ceil((index + 1) / 10) %>">
-                <td><%= organisation.siret %></td>
-                <td><%= organisation.nom %></td>
-                <td><%= organisation.type %></td>
-                <td><%= organisation.siege %></td>
+              <% for (let i = 0; i < organizations.length; i++) { %>
+              <tr>
+                <td><%= organizations[i].siret %></td>
+                <td><%= organizations[i].nom %></td>
+                <td><%= organizations[i].type %></td>
+                <td><%= organizations[i].siege_social %></td>
                 <td>
                   <a
+                    href="/valider-organisation/<%= organizations[i].id %>"
                     class="btn btn-primary"
-                    href="/valider/<%= organisation.id %>"
                     >Valider</a
                   >
-                </td>
-                <td>
                   <a
+                    href="/refuser-organisation/<%= organizations[i].id %>"
                     class="btn btn-danger"
-                    href="/refuser/<%= organisation.id %>"
                     >Refuser</a
                   >
                 </td>
               </tr>
-              <% }) %>
+              <% } %>
             </tbody>
           </table>
           <ul class="pagination">
-            <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-              <a
-                class="page-link"
-                href="#"
-                tabindex="-1"
-                onclick="changePage(currentPage - 1)"
-                >Previous</a
-              >
-            </li>
-            <% for (let i = 1; i <= Math.ceil(organisations.length / 10); i++) {
-            %>
-            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-              <a class="page-link" href="#" onclick="changePage(<%= i %>)"
-                ><%= i %></a
-              >
-            </li>
-            <% } %>
-            <li
-              class="page-item <%= currentPage === Math.ceil(organisations.length / 10) ? 'disabled' : '' %>"
-            >
-              <a
-                class="page-link"
-                href="#"
-                onclick="changePage(currentPage + 1)"
-                >Next</a
-              >
-            </li>
+            <!-- Pagination logic here if needed -->
           </ul>
         </main>
       </div>
     </div>
-
-    <script>
-      let currentPage = 1;
-      const changePage = (page) => {
-          if (page < 1 || page > Math.ceil(<%= organisations.length %> / 10)) return;
-          currentPage = page;
-          document.querySelectorAll("tr.page").forEach(row => row.style.display = 'none');
-          document.querySelectorAll("tr.page" + currentPage).forEach(row => row.style.display = '');
-          document.querySelectorAll(".pagination .page-item").forEach(item => item.classList.remove('active'));
-          document.querySelector(".pagination .page-item:nth-child(" + (currentPage + 1) + ")").classList.add('active');
-      }
-      changePage(currentPage);
-    </script>
 
     <footer></footer>
   </body>
