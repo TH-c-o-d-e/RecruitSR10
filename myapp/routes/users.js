@@ -249,4 +249,18 @@ function checkAccountType(type) {
   };
 }
 
+// Route pour attribuer les privilèges administrateurs à un utilisateur
+router.post('/donner-admin/:userId', function(req, res, next) {
+  const userId = req.params.userId;
+
+  // Mettre à jour le type de compte de l'utilisateur pour le faire administrateur (type_compte = 0 pour administrateur)
+  userModel.updateTypeCompte(userId, 0, function(success) {
+    if (success) {
+      res.send('Utilisateur mis à jour avec les privilèges administrateurs.');
+    } else {
+      res.status(500).send('Erreur lors de la mise à jour des privilèges administrateurs de l\'utilisateur.');
+    }
+  });
+});
+
 module.exports = router;

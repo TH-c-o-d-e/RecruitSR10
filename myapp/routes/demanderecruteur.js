@@ -1,6 +1,7 @@
 const express = require('express');
 var router = express.Router();
 const demandeRecruteurModel = require('../model/DemandeRecruteur');
+const organisationModel = require("../model/Organisation");
 
 // Route pour récupérer une demande de recruteur par demandeur et organisation
 router.get('/:demandeur/:organisation', function(req, res, next) {
@@ -108,3 +109,37 @@ router.get('/filter', function(req, res, next) {
 });
 
 module.exports = router;
+
+router.post('/demande-recruteur', function(req, res, next) {
+  const { siren } = req.body; // Récupérer le numéro de SIREN depuis le formulaire
+
+  // Vérifier si l'organisation existe dans la base de données
+  organisationModel.getBySiren(siren, function(err, organisation) {
+    if (err) {
+      console.error("Erreur lors de la vérification de l'organisation :", err);
+      return res.status(500).json({ message: "Erreur lors de la vérification de l'organisation." });
+    }
+
+    if (!organisation) {
+      return res.redirect('/demande-organisation'); // Rediriger vers la page de demande d'organisation
+    }
+
+    // Créer une demande dans la table DemandeRecruteur
+    demandeRecruteurModel.create({
+      demandeur: req.session.userid, // Supposant que req.session.userid contient l'identifiant de l'utilisateur connecté
+      organisation: organisation.siren
+    }, function(err, demande) {
+      if (err) {
+        console.error("Erreur lors de la création de la demande de recruteur :", err);
+        return res.status(500).json({ message: "Erreur lors de la création de la demande de recruteur." });
+      }
+      res.status(200).json({ message: "Demande de recruteur soumise avec succès." });
+    });
+
+  });
+});
+
+// Route pour rediriger vers la page de demande d'organisation
+router.get('/demande-organisation', function(req, res) {
+  res.render('demandeOrganisation', { title: 'Demande d\'organisation' });
+});

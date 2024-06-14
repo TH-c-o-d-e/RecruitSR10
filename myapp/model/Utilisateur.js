@@ -113,4 +113,16 @@ module.exports = {
       callback(results);
     });
   },
+
+  updateTypeCompte: function(userId, typeCompte, callback) {
+    const sql = "UPDATE Utilisateur SET type_compte = ? WHERE id = ?";
+    db.query(sql, [typeCompte, userId], function(err, result) {
+      if (err) {
+        console.error("Erreur lors de la mise à jour du type de compte de l'utilisateur :", err);
+        callback(false);
+      } else {
+        callback(true);
+      }
+    });
+  },
 }

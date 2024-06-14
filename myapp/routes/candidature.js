@@ -4,7 +4,7 @@ const candidatureModel = require('../model/Candidature.js');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-
+const archiver = require('archiver')
 /* GET all candidatures, with optional filtering, sorting, and searching */
 router.get('/candidatureslist', function (req, res, next) {
   const filter = req.query.filter;
@@ -253,6 +253,58 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Serveur démarré sur le port ${port}`);
 });
+
+// Route pour télécharger toutes les pièces d'une candidature
+router.get('/candidature/:id/download', function(req, res, next) {
+  const candidatureId = req.params.id;
+
+  candidatureModel.downloadAllPieces(candidatureId, function(err, filePaths) {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Erreur lors du téléchargement des fichiers.' });
+    }
+
+    if (!filePaths || filePaths.length === 0) {
+      return res.status(404).json({ error: 'Aucun fichier trouvé pour cette candidature.' });
+    }
+
+    const zipFileName = 'candidature_' + candidatureId + '_pieces.zip';
+    const zipPath = path.join(__dirname, '..', 'public', 'downloads', zipFileName);
+    const output = fs.createWriteStream(zipPath);
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // Compression maximale
+    });
+
+    output.on('close', function() {
+      res.download(zipPath, zipFileName, function(err) {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: 'Erreur lors du téléchargement du fichier zip.' });
+        }
+
+        // Supprimer le fichier zip après le téléchargement
+        fs.unlinkSync(zipPath);
+      });
+    });
+
+    archive.on('error', function(err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Erreur lors de la création du fichier zip.' });
+    });
+
+    archive.pipe(output);
+
+    // Ajouter chaque fichier au zip
+    for (let filePath of filePaths) {
+      const fileName = path.basename(filePath);
+      archive.append(fs.createReadStream(filePath), { name: fileName });
+    }
+
+    archive.finalize();
+  });
+});
+
+module.exports = router;
 
 
 module.exports = router;

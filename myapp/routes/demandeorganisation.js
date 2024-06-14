@@ -155,4 +155,34 @@ router.get('/demandeslist/sort/:sortBy/:sortOrder', function (req, res, next) {
   });
 });
 
+router.post('/demande-organisation', function(req, res, next) {
+    const { siren, nom, type, siegeSocial } = req.body;
+    const demandeurId = req.session.userid; // Supposons que l'ID de l'utilisateur est stocké dans la session
+  
+    // Création de la demande d'organisation
+    demandeOrganisationModel.create(demandeurId, new Date(), siren, nom, type, siegeSocial, function(success) {
+      if (success) {
+        res.send('Demande d\'organisation créée avec succès.');
+      } else {
+        res.status(500).send('Erreur lors de la création de la demande d\'organisation.');
+      }
+    });
+  });
+
+  router.post('/demande-organisation', function(req, res, next) {
+    const { siren, nom, type, siegeSocial } = req.body;
+    const demandeurId = req.session.userid; // Supposons que l'ID de l'utilisateur est stocké dans la session
+  
+    // Création de la demande d'organisation
+    demandeOrganisationModel.create(demandeurId, new Date(), siren, nom, type, siegeSocial, function(success) {
+      if (success) {
+        res.send('Demande d\'organisation créée avec succès.');
+      } else {
+        res.status(500).send('Erreur lors de la création de la demande d\'organisation.');
+      }
+    });
+  });
+  
+  
+  
 module.exports = router;
