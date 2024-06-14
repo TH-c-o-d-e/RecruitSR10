@@ -1,33 +1,58 @@
-var express = require('express');
+const express = require('express');
 var router = express.Router();
 const organisationModel = require('../model/Organisation.js');
 
-// /* GET organisations listing. */
-// router.get('/organisationslist', function (req, res, next) {
-//   organisationModel.readAll(function (result) {
-//     res.render('organisationsList', { title: 'Liste des organisations', organisations: result });
-//   });
-// });
+// Route pour récupérer une organisation par SIREN
+router.get('/:siren', function(req, res, next) {
+  const siren = req.params.siren;
 
-/* On met à jour une organisation */
-router.put('/editorganisation', function (req, res, next) {
+  organisationModel.read(siren, function(result) {
+    res.render('organisation', { title: 'Organisation', organisation: result[0] });
+  });
+});
+
+// Route pour récupérer toutes les organisations
+router.get('/', function(req, res, next) {
+  organisationModel.readAll(function(result) {
+    res.render('organisations', { title: 'Liste des organisations', organisations: result });
+  });
+});
+
+// Route pour créer une organisation
+router.post('/', function(req, res, next) {
   const siren = req.body.siren;
   const nom = req.body.nom;
   const type = req.body.type;
   const siege_social = req.body.siege_social;
-  organisationModel.update(siren, nom, type, siege_social, function (err, success) {
-    if (err) {
-      res.status(500).send("Erreur lors de la mise à jour de l'organisation.");
-    } else if (success) {
-      res.send("Mise à jour de l'organisation réussie.");
-    } else {
-      res.status(404).send("L'organisation n'a pas été trouvée.");
-    }
+
+  organisationModel.create(siren, nom, type, siege_social, function(result) {
+    res.redirect('/organisations');
   });
 });
 
-/* GET organisations listing with filter, sort and search */
-router.get('/organisationslist', function (req, res, next) {
+// Route pour mettre à jour une organisation
+router.put('/:siren', function(req, res, next) {
+  const siren = req.params.siren;
+  const nom = req.body.nom;
+  const type = req.body.type;
+  const siege_social = req.body.siege_social;
+
+  organisationModel.update(siren, nom, type, siege_social, function(result) {
+    res.redirect('/organisations');
+  });
+});
+
+// Route pour supprimer une organisation
+router.delete('/:siren', function(req, res, next) {
+  const siren = req.params.siren;
+
+  organisationModel.delete(siren, function(result) {
+    res.redirect('/organisations');
+  });
+});
+
+// Route pour filtrer, trier et rechercher des organisations
+router.get('/filter', function(req, res, next) {
   const filter = req.query.filter;
   const value = req.query.value;
   const sortBy = req.query.sortBy;
@@ -52,7 +77,7 @@ router.get('/organisationslist', function (req, res, next) {
       break;
   }
 
-  queryFunction(value || search, function (result) {
+  queryFunction(value || search, function(result) {
     if (sortBy && sortOrder) {
       result.sort((a, b) => {
         if (a[sortBy] < b[sortBy]) {
@@ -65,8 +90,8 @@ router.get('/organisationslist', function (req, res, next) {
       });
       title += ' triées par ' + sortBy;
     }
-    res.render('organisationsList', { title: title, organisations: result });
+    res.render('organisations', { title: title, organisations: result });
   });
 });
- 
+
 module.exports = router;

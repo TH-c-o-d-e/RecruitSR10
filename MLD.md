@@ -12,4 +12,4 @@ Candidature (#offre => Offre, #Candidat => Utilisateur, date : date, pieces : fi
 
 DemandeRecruteur(#Demandeur => Utilisateur : NOT NULL,  #Organisation=> Organisation : NOT NULL )
 
-DemandeOrganisation(#Demandeur => Utilisateur : NOT NULL, date : date #Siren: int(9),  NULL Nom : char, Type : char : Siège social : char ) 
+    DemandeOrganisation(#Demandeur => Utilisateur : NOT NULL, date : date #Siren: int(9),  NULL Nom : char, Type : char : Siège social : char ) 

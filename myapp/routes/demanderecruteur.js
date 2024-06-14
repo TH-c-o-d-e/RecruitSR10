@@ -1,6 +1,7 @@
 const express = require('express');
-const router = express.Router();
-const demandeRecruteurModel = require('../models/demandeRecruteur');
+var router = express.Router();
+const demandeRecruteurModel = require('../model/DemandeRecruteur');
+const organisationModel = require("../model/Organisation");
 
 // Route pour récupérer une demande de recruteur par demandeur et organisation
 router.get('/:demandeur/:organisation', function(req, res, next) {
@@ -8,7 +9,11 @@ router.get('/:demandeur/:organisation', function(req, res, next) {
   const organisation = req.params.organisation;
 
   demandeRecruteurModel.read(demandeur, organisation, function(result) {
-    res.render('demandeRecruteur', { title: 'Demande de recruteur', demandeRecruteur: result[0] });
+    if (result.length > 0) {
+      res.render('demandeRecruteur', { title: 'Demande de recruteur', demandeRecruteur: result[0] });
+    } else {
+      res.status(404).send('Demande non trouvée.');
+    }
   });
 });
 
@@ -21,11 +26,14 @@ router.get('/', function(req, res, next) {
 
 // Route pour créer une demande de recruteur
 router.post('/', function(req, res, next) {
-  const demandeur = req.body.demandeur;
-  const organisation = req.body.organisation;
+  const { demandeur, organisation } = req.body;
 
-  demandeRecruteurModel.create(demandeur, organisation, function(result) {
-    res.redirect('/demandesRecruteur');
+  demandeRecruteurModel.create(demandeur, organisation, function(success) {
+    if (success) {
+      res.redirect('/demandesRecruteur');
+    } else {
+      res.status(500).send('Erreur lors de la création de la demande.');
+    }
   });
 });
 
@@ -34,8 +42,12 @@ router.put('/:demandeur/:organisation', function(req, res, next) {
   const demandeur = req.params.demandeur;
   const organisation = req.params.organisation;
 
-  demandeRecruteurModel.update(demandeur, organisation, function(result) {
-    res.redirect('/demandesRecruteur');
+  demandeRecruteurModel.update(demandeur, organisation, function(success) {
+    if (success) {
+      res.redirect('/demandesRecruteur');
+    } else {
+      res.status(500).send('Erreur lors de la mise à jour de la demande.');
+    }
   });
 });
 
@@ -44,8 +56,12 @@ router.delete('/:demandeur/:organisation', function(req, res, next) {
   const demandeur = req.params.demandeur;
   const organisation = req.params.organisation;
 
-  demandeRecruteurModel.delete(demandeur, organisation, function(result) {
-    res.redirect('/demandesRecruteur');
+  demandeRecruteurModel.delete(demandeur, organisation, function(success) {
+    if (success) {
+      res.redirect('/demandesRecruteur');
+    } else {
+      res.status(500).send('Erreur lors de la suppression de la demande.');
+    }
   });
 });
 
@@ -92,5 +108,38 @@ router.get('/filter', function(req, res, next) {
   });
 });
 
-
 module.exports = router;
+
+router.post('/demande-recruteur', function(req, res, next) {
+  const { siren } = req.body; // Récupérer le numéro de SIREN depuis le formulaire
+
+  // Vérifier si l'organisation existe dans la base de données
+  organisationModel.getBySiren(siren, function(err, organisation) {
+    if (err) {
+      console.error("Erreur lors de la vérification de l'organisation :", err);
+      return res.status(500).json({ message: "Erreur lors de la vérification de l'organisation." });
+    }
+
+    if (!organisation) {
+      return res.redirect('/demande-organisation'); // Rediriger vers la page de demande d'organisation
+    }
+
+    // Créer une demande dans la table DemandeRecruteur
+    demandeRecruteurModel.create({
+      demandeur: req.session.userid, // Supposant que req.session.userid contient l'identifiant de l'utilisateur connecté
+      organisation: organisation.siren
+    }, function(err, demande) {
+      if (err) {
+        console.error("Erreur lors de la création de la demande de recruteur :", err);
+        return res.status(500).json({ message: "Erreur lors de la création de la demande de recruteur." });
+      }
+      res.status(200).json({ message: "Demande de recruteur soumise avec succès." });
+    });
+
+  });
+});
+
+// Route pour rediriger vers la page de demande d'organisation
+router.get('/demande-organisation', function(req, res) {
+  res.render('demandeOrganisation', { title: 'Demande d\'organisation' });
+});

@@ -1,8 +1,9 @@
 const db = require('./connexion_bd.js');
+const ficheModel = require('./Fiche.js');
 
 module.exports = {
-  read: function (numero_offre, callback) {
-    db.query("SELECT * FROM Offre WHERE numero_offre = ?", numero_offre, function (err, results) {
+  read: function (numOffre, callback) {
+    db.query("SELECT * FROM Offre WHERE numero_offre = ?", [numOffre], function (err, results) {
       if (err) throw err;
       callback(results);
     });
@@ -15,53 +16,32 @@ module.exports = {
     });
   },
 
-  create: function (numero_offre, rattachement, etat, date_publication, date_validite, indications, liste_pieces, nombre_pieces, callback) {
-    var sql = "INSERT INTO Offre (numero_offre, rattachement, etat, date_publication, date_validite, indications, liste_pieces, nombre_pieces) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(sql, [numero_offre, rattachement, etat, date_publication, date_validite, indications, liste_pieces, nombre_pieces], function (err, result) {
+  create: function (numOffre, fiche, actif, datePublication, dateValidite, indications, listePieces, nombrePieces, callback) {
+    var sql = "INSERT INTO Offre (numero_offre, rattachement, actif, date_publication, date_validite, indications, liste_pieces, nombre_pieces) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    db.query(sql, [numOffre, fiche, actif, datePublication, dateValidite, indications, listePieces, nombrePieces], function (err, result) {
       if (err) throw err;
       callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
     });
   },
 
-  update: function (numero_offre, rattachement, etat, date_publication, date_validite, indications, liste_pieces, nombre_pieces, callback) {
-    var sql = "UPDATE Offre SET rattachement = ?, etat = ?, date_publication = ?, date_validite = ?, indications = ?, liste_pieces = ?, nombre_pieces = ? WHERE numero_offre = ?";
-    db.query(sql, [rattachement, etat, date_publication, date_validite, indications, liste_pieces, nombre_pieces, numero_offre], function (err, result) {
+  update: function (numOffre, fiche, actif, datePublication, dateValidite, indications, listePieces, nombrePieces, callback) {
+    var sql = "UPDATE Offre SET rattachement = ?, actif = ?, date_publication = ?, date_validite = ?, indications = ?, liste_pieces = ?, nombre_pieces = ? WHERE numero_offre = ?";
+    db.query(sql, [fiche, actif, datePublication, dateValidite, indications, listePieces, nombrePieces, numOffre], function (err, result) {
       if (err) throw err;
       callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
     });
   },
 
-  delete: function (numero_offre, callback) {
+  delete: function (numOffre, callback) {
     var sql = "DELETE FROM Offre WHERE numero_offre = ?";
-    db.query(sql, [numero_offre], function (err, result) {
+    db.query(sql, [numOffre], function (err, result) {
       if (err) throw err;
       callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
     });
   },
 
-  readByRattachement: function (rattachement, callback) {
-    db.query("SELECT * FROM Offre WHERE rattachement = ?", [rattachement], function (err, results) {
-      if (err) throw err;
-      callback(results);
-    });
-  },
-
-  readByEtat: function (etat, callback) {
-    db.query("SELECT * FROM Offre WHERE etat = ?", [etat], function (err, results) {
-      if (err) throw err;
-      callback(results);
-    });
-  },
-
-  readByDatePublication: function (date_publication, callback) {
-    db.query("SELECT * FROM Offre WHERE date_publication = ?", [date_publication], function (err, results) {
-      if (err) throw err;
-      callback(results);
-    });
-  },
-
-  readByDateValidite: function (date_validite, callback) {
-    db.query("SELECT * FROM Offre WHERE date_validite = ?", [date_validite], function (err, results) {
+  readByFiche: function (fiche, callback) {
+    db.query("SELECT * FROM Offre WHERE rattachement = ?", [fiche], function (err, results) {
       if (err) throw err;
       callback(results);
     });
@@ -75,54 +55,59 @@ module.exports = {
     });
   },
 
-  readByIntitule: function (intitule, callback) {
-    db.query("SELECT * FROM Offre WHERE rattachement IN (SELECT intitule FROM Fiche WHERE intitule = ?)", [intitule], function (err, results) {
-      if (err) throw err;
-      callback(results);
-    });
-  },
-  
-  readByOrganisation: function (organisation, callback) {
-    db.query("SELECT * FROM Offre WHERE rattachement IN (SELECT intitule FROM Fiche WHERE organisation = ?)", [organisation], function (err, results) {
-      if (err) throw err;
-      callback(results);
-    });
-  },
-  
-  readByStatutPoste: function (statut_poste, callback) {
-    db.query("SELECT * FROM Offre WHERE rattachement IN (SELECT intitule FROM Fiche WHERE statut_poste = ?)", [statut_poste], function (err, results) {
-      if (err) throw err;
-      callback(results);
-    });
-  },
-  
-  readByLieuMission: function (lieu_mission, callback) {
-    db.query("SELECT * FROM Offre WHERE rattachement IN (SELECT intitule FROM Fiche WHERE lieu_mission = ?)", [lieu_mission], function (err, results) {
-      if (err) throw err;
-      callback(results);
-    });
-  },
-  
-  readByFourchette: function (fourchette, callback) {
-    db.query("SELECT * FROM Offre WHERE rattachement IN (SELECT intitule FROM Fiche WHERE fourchette = ?)", [fourchette], function (err, results) {
-      if (err) throw err;
-      callback(results);
-    });
-  },
-  
-  readByRythme: function (rythme, callback) {
-    db.query("SELECT * FROM Offre WHERE rattachement IN (SELECT intitule FROM Fiche WHERE rythme = ?)", [rythme], function (err, results) {
-      if (err) throw err;
-      callback(results);
-    });
-  },
-  
   search: function (query, callback) {
-    db.query("SELECT * FROM Offre WHERE numero_offre LIKE ? OR rattachement LIKE ? OR indications LIKE ? OR rattachement IN (SELECT intitule FROM Fiche WHERE intitule LIKE ? OR organisation LIKE ? OR statut_poste LIKE ? OR lieu_mission LIKE ? OR fourchette LIKE ? OR rythme LIKE ?)", ['%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%'], function (err, results) {
+    db.query("SELECT * FROM Offre WHERE numero_offre LIKE ? OR indications LIKE ?", ['%' + query + '%', '%' + query + '%'], function (err, results) {
       if (err) throw err;
       callback(results);
     });
   },
-  
-  
+
+  readByRattachement: function (value, organisation, callback) {
+    db.query("SELECT * FROM Offre JOIN Fiche ON Offre.rattachement = Fiche.Intitulé WHERE Fiche.rattachement = ? AND Fiche.Organisation = ?", [value, organisation], callback);
+  },
+
+  readByEtat: function (value, callback) {
+    db.query("SELECT * FROM Offre WHERE etat = ?", [value], callback);
+  },
+
+  readByDatePublication: function (value, callback) {
+    db.query("SELECT * FROM Offre WHERE date_publication = ?", [value], callback);
+  },
+
+  readByDateValidite: function (value, callback) {
+    db.query("SELECT * FROM Offre WHERE date_validite = ?", [value], callback);
+  },
+
+  readByIntitule: function (value, organisation, callback) {
+    db.query("SELECT * FROM Offre JOIN Fiche ON Offre.rattachement = Fiche.Intitulé WHERE Fiche.Intitulé LIKE ? AND Fiche.Organisation = ?", ['%' + value + '%', organisation], callback);
+  },
+
+  readByOrganisation: function (organisation, callback) {
+    db.query("SELECT * FROM Offre JOIN Fiche ON Offre.rattachement = Fiche.Intitulé WHERE Fiche.Organisation = ?", [organisation], callback);
+  },
+
+  readByStatutPoste: function (value, organisation, callback) {
+    db.query("SELECT * FROM Offre JOIN Fiche ON Offre.rattachement = Fiche.Intitulé WHERE Fiche.Statut_poste LIKE ? AND Fiche.Organisation = ?", ['%' + value + '%', organisation], callback);
+  },
+
+  readByLieuMission: function (value, organisation, callback) {
+    db.query("SELECT * FROM Offre JOIN Fiche ON Offre.rattachement = Fiche.Intitulé WHERE Fiche.Lieu_mission LIKE ? AND Fiche.Organisation = ?", ['%' + value + '%', organisation], callback);
+  },
+
+  readByFourchette: function (value, organisation, callback) {
+    db.query("SELECT * FROM Offre JOIN Fiche ON Offre.rattachement = Fiche.Intitulé WHERE Fiche.Fourchette = ? AND Fiche.Organisation = ?", [value, organisation], callback);
+  },
+
+  readByRythme: function (value, organisation, callback) {
+    db.query("SELECT * FROM Offre JOIN Fiche ON Offre.rattachement = Fiche.Intitulé WHERE Fiche.Rythme LIKE ? AND Fiche.Organisation = ?", ['%' + value + '%', organisation], callback);
+  },
+
+  search: function (query, organisation, callback) {
+    db.query("SELECT * FROM Offre JOIN Fiche ON Offre.rattachement = Fiche.Intitulé WHERE (Fiche.Intitulé LIKE ? OR Fiche.Organisation LIKE ? OR Fiche.Statut_poste LIKE ? OR Fiche.Lieu_mission LIKE ? OR Fiche.Rythme LIKE ? OR Fiche.Fourchette LIKE ?) AND Fiche.Organisation = ?", 
+      ['%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', organisation], callback);
+  },
+
+  readAllNonExpirees: function (callback) {
+    db.query("SELECT * FROM Offre WHERE date_validite >= CURDATE() OR date_validite IS NULL", callback);
+  }
 };

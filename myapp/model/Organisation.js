@@ -2,7 +2,7 @@ const db = require('./connexion_bd.js');
 
 module.exports = {
   read: function (siren, callback) {
-    db.query("SELECT * FROM Organisation WHERE siren = ?", siren, function (err, results) {
+    db.query("SELECT * FROM Organisation WHERE siren = ?", [siren], function (err, results) {
       if (err) throw err;
       callback(results);
     });
@@ -60,11 +60,11 @@ module.exports = {
       callback(results);
     });
   },
+
   search: function (query, callback) {
-    db.query("SELECT * FROM Organisation WHERE Siren LIKE ? OR Nom LIKE ? OR Type LIKE ? OR Siege_social LIKE ?", ['%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%'], function (err, results) {
+    db.query("SELECT * FROM Organisation WHERE siren LIKE ? OR nom LIKE ? OR type LIKE ? OR siege_social LIKE ?", ['%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%'], function (err, results) {
       if (err) throw err;
       callback(results);
     });
   },
-  
 };
