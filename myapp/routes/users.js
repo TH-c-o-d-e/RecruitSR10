@@ -200,16 +200,15 @@ router.post('/inscription', function (req, res, next) {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
   if (!regex.test(mot_de_passe)) {
     req.flash('error', 'Le mot de passe doit comporter au moins 12 caractères, dont des majuscules, des minuscules, des chiffres et des caractères spéciaux parmi @$!%*?&');
-    res.redirect('/inscription');
+    res.redirect('../users/inscription');
     return;
   }
 
-  userModel.create(email, mot_de_passe, prenom, nom, { telephone, date_naissance }, statut_compte, type_compte, null, function (result) {
+  userModel.create(email, mot_de_passe, prenom, nom,  telephone, date_naissance , statut_compte, type_compte, null, function (result) {
     if (result) {
-      res.redirect('/utilisateurs');
+      res.redirect('/index');
     } else {
-      req.flash('error', 'L\'inscription a échoué !');
-      res.redirect('/inscription');
+      res.redirect('/users/inscription');
     }
   });
 });
@@ -263,4 +262,10 @@ router.post('/donner-admin/:userId', function(req, res, next) {
   });
 });
 
+
+
+// Route pour obtenir la page d'inscription
+router.get('/inscription', function (req, res, next) {
+  res.render('inscription', { title: 'Inscription' });
+});
 module.exports = router;

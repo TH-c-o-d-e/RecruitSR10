@@ -6,3 +6,15 @@ body {
 a {
   color: #00B7FF;
 }
+body {
+  background-image: url('/images/background.jpg'); /* Changez le nom du fichier et le chemin si nécessaire */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+}
