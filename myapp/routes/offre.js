@@ -206,5 +206,21 @@ router.get('/offreslist', function (req, res, next) {
   });
 });
 
+const express = require('express');
+const router = express.Router();
+const offreModel = require('../models/offre');
+
+// Route pour récupérer les pièces demandées pour une offre donnée
+router.get('/candidature/:id', function(req, res, next) {
+  const id = req.params.id;
+
+  offreModel.read(id, function(result) {
+    const offre = result[0];
+    const liste_pieces = offre.liste_pieces.split(',');
+    const nombre_pieces = offre.nombre_pieces;
+
+    res.render('candidature', { title: 'Candidature', offre: offre, liste_pieces: liste_pieces, nombre_pieces: nombre_pieces });
+  });
+});
 
 module.exports = router;

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const userModel = require('../model/Utilisateur.js');
+const nodemailer = require("nodemailer")
 
 /* GET users listing. 
 router.get('/userslist', function (req, res, next) {
@@ -9,7 +10,7 @@ router.get('/userslist', function (req, res, next) {
   });
 });*/
 
-/* nOn met à jour un utilisateur */
+/* On met à jour un utilisateur */
 router.put('/edituser', function (req, res, next) {
   const id = req.body.id;
   const email = req.body.email;
@@ -20,13 +21,44 @@ router.put('/edituser', function (req, res, next) {
   const statut_compte = req.body.statut_compte;
   const type_compte = req.body.type_compte;
   const organisation = req.body.organisation;
-  userModel.update(id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, function (err, success) {
+
+  userModel.read(id, function (err, result) {
     if (err) {
-      res.status(500).send("Erreur lors de la mise à jour de l'utilisateur.");
-    } else if (success) {
-      res.send("Mise à jour de l'utilisateur réussie.");
-    } else {
+      res.status(500).send("Erreur lors de la récupération de l'utilisateur.");
+    } else if (result.length === 0) {
       res.status(404).send("L'utilisateur n'a pas été trouvé.");
+    } else {
+      const ancien_type_compte = result[0].type_compte;
+
+      userModel.update(id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, function (err, success) {
+        if (err) {
+          res.status(500).send("Erreur lors de la mise à jour de l'utilisateur.");
+        } else if (success) {
+          if (type_compte !== ancien_type_compte) {
+            // Le type de compte a changé, envoyer un mail
+            const transporter = nodemailer.createTransport({
+              // Configuration du transporteur de mail
+            });
+
+            const mailOptions = {
+              from: 'noreply@example.com',
+              to: email,
+              subject: 'Votre type de compte a changé',
+              text: `Bonjour ${prenom},\n\nVotre type de compte a été changé de ${ancien_type_compte} à ${type_compte}.\n\nCordialement,\nL'équipe de notre site`
+            };
+
+            transporter.sendMail(mailOptions, function(error, info) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent: ' + info.response);
+              }
+            });
+          }
+
+          res.send("Mise à jour de l'utilisateur réussie.");
+        } else {        }
+      });
     }
   });
 });
