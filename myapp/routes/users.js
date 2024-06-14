@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const userModel = require('../model/Utilisateur.js');
 const nodemailer = require('nodemailer');
+const flash = require('connect-flash');
+
+router.use(flash());
 
 // Route pour mettre à jour un utilisateur
 router.put('/edituser', function (req, res, next) {
@@ -186,6 +189,7 @@ router.get('/userslist', function (req, res, next) {
 });
 
 // Route pour l'inscription d'un utilisateur
+// Route pour l'inscription d'un utilisateur
 router.post('/inscription', function (req, res, next) {
   const nom = req.body.nom;
   const prenom = req.body.prenom;
@@ -199,18 +203,39 @@ router.post('/inscription', function (req, res, next) {
   // Vérification de la complexité du mot de passe
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
   if (!regex.test(mot_de_passe)) {
-    req.flash('error', 'Le mot de passe doit comporter au moins 12 caractères, dont des majuscules, des minuscules, des chiffres et des caractères spéciaux parmi @$!%*?&');
-    res.redirect('../users/inscription');
-    return;
+    req.session.message = {
+      type: 'error',
+      text: 'Le mot de passe doit comporter au moins 12 caractères, dont des majuscules, des minuscules, des chiffres et des caractères spéciaux parmi @$!%*?&'
+    };
+    return res.redirect('/users/inscription');
   }
 
-  userModel.create(email, mot_de_passe, prenom, nom,  telephone, date_naissance , statut_compte, type_compte, null, function (result) {
+  userModel.create(email, mot_de_passe, prenom, nom, telephone, date_naissance, statut_compte, type_compte, null, function (result) {
     if (result) {
+      req.session.message = {
+        type: 'success',
+        text: 'Inscription réussie. Vous pouvez maintenant vous connecter.'
+      };
       res.redirect('/index');
     } else {
+      req.session.message = {
+        type: 'error',
+        text: 'Une erreur s\'est produite lors de l\'inscription. Veuillez réessayer.'
+      };
       res.redirect('/users/inscription');
     }
   });
+});
+
+// Route pour obtenir la page d'inscription
+router.get('/inscription', function (req, res, next) {
+  const message = req.session.message;
+  req.session.message = null; // Efface le message après l'avoir récupéré
+
+  res.render('inscription', { title: 'Inscription', message: message });
+});// Route pour obtenir la page d'inscription
+router.get('/inscription', function (req, res, next) {
+  res.render('inscription', { title: 'Inscription' });
 });
 
 // Route pour l'accueil candidat
@@ -262,10 +287,4 @@ router.post('/donner-admin/:userId', function(req, res, next) {
   });
 });
 
-
-
-// Route pour obtenir la page d'inscription
-router.get('/inscription', function (req, res, next) {
-  res.render('inscription', { title: 'Inscription' });
-});
 module.exports = router;
