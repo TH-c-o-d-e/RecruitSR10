@@ -1,6 +1,6 @@
 const express = require('express');
-const router = express.Router();
-const organisationModel = require('../models/organisation');
+var router = express.Router();
+const organisationModel = require('../model/Organisation.js');
 
 // Route pour récupérer une organisation par SIREN
 router.get('/:siren', function(req, res, next) {
@@ -63,42 +63,35 @@ router.get('/filter', function(req, res, next) {
   let title;
 
   switch (filter) {
-    case 'siren':
-      queryFunction = organisationModel.readBySiren;
-      title = 'Liste des organisations par SIREN';
+    case 'type':
+      queryFunction = organisationModel.readByType;
+      title = 'Liste des organisations par type';
       break;
-    case 'nom':
-      queryFunction = organisationModel.readByNom;
-      title = 'Liste des organisations par nom';
-      break
-      case 'type':
-        queryFunction = organisationModel.readByType;
-        title = 'Liste des organisations par type';
-        break;
-      case 'siege_social':
-        queryFunction = organisationModel.readBySiegeSocial;
-        title = 'Liste des organisations par siège social';
-        break;
-      default:
-        queryFunction = organisationModel.search;
-        title = 'Liste des organisations';
-        break;
+    case 'siege_social':
+      queryFunction = organisationModel.readBySiegeSocial;
+      title = 'Liste des organisations par siège social';
+      break;
+    default:
+      queryFunction = organisationModel.search;
+      title = 'Liste des organisations';
+      break;
+  }
+
+  queryFunction(value || search, function(result) {
+    if (sortBy && sortOrder) {
+      result.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return sortOrder === 'asc' ? -1 : 1;
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return sortOrder === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+      title += ' triées par ' + sortBy;
     }
-  
-    queryFunction(value || search, function(result) {
-      if (sortBy && sortOrder) {
-        result.sort((a, b) => {
-          if (a[sortBy] < b[sortBy]) {
-            return sortOrder === 'asc' ? -1 : 1;
-          }
-          if (a[sortBy] > b[sortBy]) {
-            return sortOrder === 'asc' ? 1 : -1;
-          }
-          return 0;
-        });
-        title += ' triées par ' + sortBy;
-      }
-      res.render('organisations', { title: title, organisations: result });
-    });
+    res.render('organisations', { title: title, organisations: result });
   });
-  
+});
+
+module.exports = router;

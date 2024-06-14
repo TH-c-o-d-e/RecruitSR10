@@ -21,8 +21,11 @@
  - Vérifier la conformité des mots de passe (vérifier les 12 caractères, majuscules, minuscules, etc.) -> fait
  - Récupérer les champs offre.liste_pieces et offre.nombre_pieces dans la vue Candidater  -> fait
  - Les récupérer dans la route pour upload -> fait
- - Mail à  envoyer aussi pour les changements de droits. 
- 
+ - Mail à  envoyer aussi pour les changements de droits.
+ - Faire un filtre pour les offres expirées pour l'utilisateur classique  
+ - Valider / refuser une candidature (envoie un mail)
+- Valider / refuser une demande d'organisation (ne supprime pas les demandes) ou de recruteur
+
 
 
 ## Liste des vues 
@@ -37,6 +40,3 @@
 - Le recruteur doit pouvoir gérer l'organisation (recycler le formulaire) 
 - Créer une route vue candidat -> recruteur et inversement
 - Chercher comment récupérer le contenu sélectionné
-- Faire un filtre pour les offres expirées pour l'utilisateur classique 
-- Valider / refuser une candidature (envoie un mail)
-- Valider / refuser une demande d'organisation (ne supprime pas les demandes) ou de recruteur

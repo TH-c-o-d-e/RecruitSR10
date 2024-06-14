@@ -107,5 +107,10 @@ module.exports = {
     });
   },
   
-  
+  readOrganisation: function(id, callback) {
+    db.query("SELECT organisation FROM Utilisateur WHERE id = ?", [id], function(err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
 }
