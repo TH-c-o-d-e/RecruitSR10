@@ -3,7 +3,6 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const session = require('express-session');
 var app = express();
 
 var indexRouter = require('./routes/index');
@@ -14,16 +13,7 @@ var ficheRouter = require('./routes/fiche');
 var organisationRouter = require('./routes/organisation');
 var demandeRecruteurRouter = require('./routes/demanderecruteur');
 var demandeOrganisationRouter = require('./routes/demandeorganisation');
-
-
-
-// Configuration de session
-app.use(session({
-  secret: 'votre_secret_session', // Changez ceci par une clé secrète pour sécuriser les sessions
-  resave: false,
-  saveUninitialized: true
-}));
-
+var session=require('./session');
 
 
 // view engine setup

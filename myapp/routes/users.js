@@ -117,9 +117,9 @@ router.delete('/deleteuser', function (req, res, next) {
 });
 
 // Route pour vérifier les identifiants d'un utilisateur
-router.post('/login', function (req, res, next) {
+router.post('/users/login', function (req, res, next) {
   const email = req.body.email;
-  const password = req.body.password;
+  const password = req.body.mot_de_passe;
   userModel.areValid(email, password, function (isValid) {
     if (isValid) {
       res.send("Identifiants valides.");
@@ -197,18 +197,18 @@ router.post('/inscription', function (req, res, next) {
   const date_naissance = req.body.date_naissance;
   const telephone = req.body.telephone;
   const mot_de_passe = req.body.mot_de_passe;
-  const type_compte = 0; // Type de compte par défaut pour une nouvelle inscription
+  const type_compte = 1; // Type de compte par défaut pour une nouvelle inscription
   const statut_compte = 1; // Statut de compte actif par défaut pour une nouvelle inscription
 
   // Vérification de la complexité du mot de passe
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+  /*const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
   if (!regex.test(mot_de_passe)) {
     req.session.message = {
       type: 'error',
       text: 'Le mot de passe doit comporter au moins 12 caractères, dont des majuscules, des minuscules, des chiffres et des caractères spéciaux parmi @$!%*?&'
     };
     return res.redirect('/users/inscription');
-  }
+  }*/
 
   userModel.create(email, mot_de_passe, prenom, nom, telephone, date_naissance, statut_compte, type_compte, null, function (result) {
     if (result) {
@@ -227,15 +227,14 @@ router.post('/inscription', function (req, res, next) {
   });
 });
 
+
 // Route pour obtenir la page d'inscription
 router.get('/inscription', function (req, res, next) {
-  const message = req.session.message;
-  req.session.message = null; // Efface le message après l'avoir récupéré
-
-  res.render('inscription', { title: 'Inscription', message: message });
-});// Route pour obtenir la page d'inscription
-router.get('/inscription', function (req, res, next) {
   res.render('inscription', { title: 'Inscription' });
+});
+
+router.get('/login', function (req, res, next) {
+  res.render('login', { title: 'Connexion' });
 });
 
 // Route pour l'accueil candidat
@@ -259,7 +258,7 @@ function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/login'); // Redirection vers la page de connexion si l'utilisateur n'est pas authentifié
+  res.redirect('/users/login'); // Redirection vers la page de connexion si l'utilisateur n'est pas authentifié
 }
 
 // Middleware pour vérifier le type de compte de l'utilisateur
