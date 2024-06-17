@@ -1,7 +1,7 @@
 const express = require('express');
 var router = express.Router();
-const demandeRecruteurModel = require('../model/DemandeRecruteur');
-const organisationModel = require("../model/Organisation");
+const demandeRecruteurModel = require('../../model/DemandeRecruteur');
+const organisationModel = require("../../model/Organisation");
 
 // Route pour récupérer une demande de recruteur par demandeur et organisation
 router.get('/:demandeur/:organisation', function(req, res, next) {

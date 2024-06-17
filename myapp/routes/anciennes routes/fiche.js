@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const ficheModel = require('../model/Fiche.js');
+const ficheModel = require('../../model/Fiche.js');
 
 // GET /fiches : Récupère toutes les fiches
 router.get('/fiches', function (req, res, next) {

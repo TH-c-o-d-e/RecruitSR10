@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const demandeOrganisationModel = require('../model/DemandeOrganisation.js');
+const demandeOrganisationModel = require('../../model/DemandeOrganisation.js');
 
 /* GET all demandes, with optional filtering, sorting, and searching */
 router.get('/demandeslist', function (req, res, next) {

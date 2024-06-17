@@ -1,6 +1,6 @@
 const express = require('express');
 var router = express.Router();
-const organisationModel = require('../model/Organisation.js');
+const organisationModel = require('../../model/Organisation.js');
 
 // Route pour récupérer une organisation par SIREN
 router.get('/:siren', function(req, res, next) {
