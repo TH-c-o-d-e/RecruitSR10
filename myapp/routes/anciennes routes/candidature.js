@@ -305,6 +305,3 @@ router.get('/candidature/:id/download', function(req, res, next) {
 });
 
 module.exports = router;
-
-
-module.exports = router;
