@@ -1,23 +1,22 @@
 const db = require('./connexion_bd.js');
 const offreModel = require('./Offre.js');
-
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
   read: function (id, callback) {
-    db.query("SELECT * FROM Utilisateur WHERE id = ?", id, function (err, results) {
+    db.query("SELECT * FROM Utilisateur WHERE id = ?", [id], function (err, results) {
       if (err) throw err;
       callback(results);
     });
   },
 
-  readbyEmail: function (email, callback) { 
-    db.query("select * from Utilisateur where email= ?",email, function (err, results) { 
+  readByEmail: function (email, callback) { 
+    db.query("SELECT * FROM Utilisateur WHERE email = ?", [email], function (err, results) { 
         if (err) throw err; 
         callback(results); 
-
     }); 
+  },
 
-},
   readAll: function (callback) {
     db.query("SELECT * FROM Utilisateur", function (err, results) {
       if (err) throw err;
@@ -26,11 +25,11 @@ module.exports = {
   },
 
   areValid: function (email, password, callback) { 
-    sql = "SELECT pwd FROM USERS WHERE email = ?"; 
-    rows = db.query(sql, email, function (err, results) { 
+    const sql = "SELECT mot_de_passe FROM Utilisateur WHERE email = ?"; 
+    db.query(sql, [email], function (err, results) { 
         if (err) throw err; 
-        if (rows.length == 1 && rows[0].pwd === password) { 
-            callback(true) 
+        if (results.length == 1 && results[0].mot_de_passe === password) { 
+            callback(true); 
         } else { 
             callback(false); 
         } 
@@ -38,39 +37,33 @@ module.exports = {
   },
 
   create: function (email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, callback) {
-    // Récupérer l'ID maximum actuellement présent dans la base de données
-    var sql = "SELECT MAX(id) AS max_id FROM Utilisateur";
-    db.query(sql, function (err, results) {
-      if (err) throw err;
-      // Incrémenter l'ID maximum de 1 pour créer le nouvel utilisateur
-      var id = results[0].max_id + 1;
-      // Insérer le nouvel utilisateur dans la base de données
-      sql = "INSERT INTO Utilisateur (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-      db.query(sql, [id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation], function (err, result) {
-        if (err) throw err;
-        callback(result.affectedRows > 0); // Renvoie true si l'insertion a réussi
-      });
+    var id = uuidv4();
+    var sql = "INSERT INTO Utilisateur (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type, organisation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    db.query(sql, [id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation], function (err, result) {
+      if (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+          callback(false, 'Email already exists');
+        } else {
+          throw err;
+        }
+      } else {
+        callback(true);
+      }
     });
   },
-  
-
   update: function (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, callback) {
-    var sql = "UPDATE Utilisateur SET email = ?, mot_de_passe = ?, prenom = ?, nom = ?, coordonnees = ?, statut_compte = ?, type_compte = ?, organisation = ? WHERE id = ?";
+    const sql = "UPDATE Utilisateur SET email = ?, mot_de_passe = ?, prenom = ?, nom = ?, coordonnees = ?, statut_compte = ?, type = ?, organisation = ? WHERE id = ?";
     db.query(sql, [email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, id], function (err, result) {
       if (err) throw err;
       callback(result.affectedRows > 0); // Renvoie true si la mise à jour a réussi
     });
   },
 
-  
   delete: function (id, callback) {
-    // Supprimer les candidatures associées à l'utilisateur
+    const candidatureModel = require('./Candidature.js'); // Assurez-vous que ce fichier existe et est correctement configuré
     candidatureModel.deleteByUtilisateur(id, function(err, result) {
-      if (err) {
-        throw err;
-      }
-      // Supprimer l'utilisateur
-      var sql = "DELETE FROM Utilisateur WHERE id = ?";
+      if (err) throw err;
+      const sql = "DELETE FROM Utilisateur WHERE id = ?";
       db.query(sql, [id], function (err, result) {
         if (err) throw err;
         callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
@@ -78,8 +71,8 @@ module.exports = {
     });
   },
   
- readByTypeCompte: function (type_compte, callback) {
-    db.query("SELECT * FROM Utilisateur WHERE type_compte = ?", [type_compte], function (err, results) {
+  readByTypeCompte: function (type_compte, callback) {
+    db.query("SELECT * FROM Utilisateur WHERE type = ?", [type_compte], function (err, results) {
       if (err) throw err;
       callback(results);
     });
@@ -93,15 +86,20 @@ module.exports = {
   },
 
   readAllSorted: function (sortBy, sortOrder, callback) {
-    var sql = "SELECT * FROM Utilisateur ORDER BY " + sortBy + " " + sortOrder;
-    db.query(sql, function (err, results) {
+    const sql = "SELECT * FROM Utilisateur ORDER BY ?? " + (sortOrder === 'DESC' ? 'DESC' : 'ASC');
+    db.query(sql, [sortBy], function (err, results) {
       if (err) throw err;
       callback(results);
     });
   },
 
   search: function (query, callback) {
-    db.query("SELECT * FROM Utilisateur WHERE id LIKE ? OR email LIKE ? OR prenom LIKE ? OR nom LIKE ? OR coordonnees LIKE ? OR statut_compte LIKE ? OR type_compte LIKE ? OR organisation LIKE ?", ['%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%'], function (err, results) {
+    const sql = `
+      SELECT * FROM Utilisateur 
+      WHERE id LIKE ? OR email LIKE ? OR prenom LIKE ? OR nom LIKE ? OR coordonnees LIKE ? OR statut_compte LIKE ? OR type_compte LIKE ? OR organisation LIKE ?
+    `;
+    const searchQuery = '%' + query + '%';
+    db.query(sql, [searchQuery, searchQuery, searchQuery, searchQuery, searchQuery, searchQuery, searchQuery, searchQuery], function (err, results) {
       if (err) throw err;
       callback(results);
     });
@@ -115,7 +113,7 @@ module.exports = {
   },
 
   updateTypeCompte: function(userId, typeCompte, callback) {
-    const sql = "UPDATE Utilisateur SET type_compte = ? WHERE id = ?";
+    const sql = "UPDATE Utilisateur SET type = ? WHERE id = ?";
     db.query(sql, [typeCompte, userId], function(err, result) {
       if (err) {
         console.error("Erreur lors de la mise à jour du type de compte de l'utilisateur :", err);
@@ -124,5 +122,5 @@ module.exports = {
         callback(true);
       }
     });
-  },
+  }
 }

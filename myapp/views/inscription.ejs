@@ -13,147 +13,33 @@
       <h2>Rejoignez notre plateforme pour postuler à des milliers d'emplois dès maintenant !</h2>
     </div>
     <div class="container">
-
-      <form action="/users/inscription" method="post">
+      <form action="/inscription" method="post">
         <fieldset>
           <legend><strong>Entrez vos informations</strong></legend>
-
           <div class="mb-3">
             <label for="email" class="form-label"><b>Email:</b></label>
             <input type="email" name="email" id="email" class="form-control" placeholder="Adresse mail" required>
           </div>
-
           <div class="mb-3">
             <label for="motdepasse" class="form-label"><b>Mot de passe:</b></label>
             <input type="password" name="mot_de_passe" id="motdepasse" class="form-control" placeholder="Mot de passe" minlength="12" required>
           </div>
-
           <div class="mb-3">
             <label for="nom" class="form-label"><b>Nom:</b></label>
             <input type="text" name="nom" id="nom" class="form-control" placeholder="Nom" required>
           </div>
-
           <div class="mb-3">
             <label for="prenom" class="form-label"><b>Prénom:</b></label>
             <input type="text" name="prenom" id="prenom" class="form-control" placeholder="Prénom" required>
           </div>
-
           <div class="mb-3">
             <label for="datenaissance" class="form-label"><b>Date de naissance:</b></label>
-            <i<!DOCTYPE html>
-              <html lang="fr">
-                <head>
-                  <meta charset="UTF-8" />
-                  <meta name="viewport" content="width=device-width" />
-                  <title>Inscription</title>
-                  <link rel="stylesheet" type="text/css" href="styleinscription.css" />
-                </head>
-                <body
-                  style="
-                    background-image: url(assortiment-bureau-plat-tablette-ecran-vide_23-2148707960.jpg);
-                    background-size: cover;
-                    margin: 0;
-                    font-family: Arial, Helvetica, sans-serif;
-                    text-align: center;
-                    border-radius: 4px;
-                  "
-                >
-                  <div
-                    class="slogan"
-                    style="
-                      color: black;
-                      background-color: white;
-                      padding: 10px 20px;
-                      display: inline-block;
-                      font-family: 'SpaceGrotesk-Light', sans-serif;
-                      font-weight: 500;
-                      font-size: 20px;
-                      line-height: 1.2;
-                    "
-                  >
-                    <h2>
-                      Rejoignez notre plateforme pour postuler à des milliers d'emplois dès
-                      maintenant !
-                    </h2>
-                  </div>
-              
-                  <div
-                    class="container"
-                    style="
-                      background-color: white;
-                      padding: 20px;
-                      margin-top: 20px;
-                      max-width: 600px;
-                      margin-left: auto;
-                      margin-right: auto;
-                      border-radius: 4px;
-                    "
-                  >
-                    <form action="/inscription" method="POST">
-                      <legend><strong>Entrez vos informations</strong></legend>
-                      <label for="email"><b>Email:</b></label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Adresse mail"
-                        required
-                      />
-              
-                      <label for="motdepasse"><b>Mot de passe:</b></label>
-                      <input
-                        type="password"
-                        id="motdepasse"
-                        name="motdepasse"
-                        placeholder="Mot de passe"
-                        minlength="12"
-                        required
-                      />
-              
-                      <label for="nom"><b>Nom:</b></label>
-                      <input type="text" id="nom" name="nom" placeholder="Nom" required />
-              
-                      <label for="prenom"><b>Prenom:</b></label>
-                      <input
-                        type="text"
-                        id="prenom"
-                        name="prenom"
-                        placeholder="Prenom"
-                        required
-                      />
-              
-                      <label for="datenaissance"><b>Date de naissance:</b></label>
-                      <input type="date" id="datenaissance" name="datenaissance" required />
-              
-                      <label for="numero"><b>Numero de telephone:</b></label>
-                      <input type="tel" id="numero" name="numero" required />
-              
-                      <button
-                        type="submit"
-                        style="
-                          background-color: #4caf50;
-                          color: white;
-                          padding: 14px 20px;
-                          margin: 8px 0;
-                          border: none;
-                          cursor: pointer;
-                          width: 100%;
-                          opacity: 0.9;
-                        "
-                      >
-                        Valider
-                      </button>
-                    </form>
-                  </div>
-                </body>
-              </html>nput type="date" name="date_naissance" id="datenaissance" class="form-control" required>
+            <input type="date" name="date_naissance" id="datenaissance" class="form-control" required>
           </div>
-
           <div class="mb-3">
             <label for="numero" class="form-label"><b>Numéro de téléphone:</b></label>
             <input type="tel" name="coordonnees" id="numero" class="form-control" placeholder="Numéro de téléphone" required>
           </div>
-
           <button type="submit" class="btn btn-primary">S'inscrire</button>
         </fieldset>
       </form>

@@ -6,14 +6,8 @@ var logger = require('morgan');
 var app = express();
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var offreRouter = require('./routes/offre');
-var candidatureRouter = require('./routes/candidature');
-var ficheRouter = require('./routes/fiche');
-var organisationRouter = require('./routes/organisation');
-var demandeRecruteurRouter = require('./routes/demanderecruteur');
-var demandeOrganisationRouter = require('./routes/demandeorganisation');
-var session=require('./session');
+var inscriptionRouter = require('./routes/inscription'); // Importer le fichier de route pour l'inscription
+var connexionRouter = require("./routes/connexion");
 
 
 // view engine setup
@@ -26,20 +20,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//router.use((req, res, next) => {
-  //res.locals.messages = req.flash();
-  //next();
-//});
+
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/organisation', organisationRouter);
-app.use('/fiche', ficheRouter);
-app.use('/offre', offreRouter);
-app.use('/candidature', candidatureRouter);
-app.use('/demanderecruteur', demandeRecruteurRouter);
-app.use('/demandeorganisation', demandeOrganisationRouter);
-
+app.use('/inscription', inscriptionRouter); // Utiliser la route d'inscription
+app.use('/connexion', connexionRouter); // Utilisation de la nouvelle route de connexion
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

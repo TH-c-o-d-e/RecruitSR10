@@ -1,40 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Connexion</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title><%= title %></title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+</head>
+<body>
+  <h1>Connexion</h1>
+  <p>Entrez vos coordonnées d'inscription</p>
+  <div class="container">
+    <form action="/connexion" method="post">
+      <fieldset>
+        <legend><strong>Entrez vos coordonnées d'inscription</strong></legend>
+        <br>
+        <label for="email"><b>Email</b></label>
+        <input type="email" placeholder="Entrer votre email" name="email" required>
 
-  <body>
-    <h1>Connexion</h1>
-    <p>Entrez vos coordonnées d'inscription</p>
-    <div class="container">
-      <form action="/login" method="post">
-        <fieldset>
-          <legend><strong>Entrez vos coordonnées d'inscription</strong></legend>
-          <br />
-          <label for="nom"><b>Nom d'utilisateur</b></label>
-          <input
-            type="text"
-            placeholder="Entrer le nom d'utilisateur"
-            name="nom"
-            required
-          />
+        <label for="mdp"><b>Mot de passe</b></label>
+        <input type="password" placeholder="Entrer le mot de passe" name="mdp" required>
 
-          <label for="mdp"><b>Mot de passe</b></label>
-          <input
-            type="password"
-            placeholder="Entrer le mot de passe"
-            name="mdp"
-            required
-          />
-
-          <button type="submit">Connexion</button>
-        </fieldset>
-      </form>
-      <a href="/inscription">Pas encore de compte ? Inscrivez-vous ici !</a>
-    </div>
-  </body>
+        <button type="submit">Connexion</button>
+      </fieldset>
+    </form>
+    <a href="/inscription">Pas encore de compte ? Inscrivez-vous ici !</a>
+  </div>
+</body>
 </html>
