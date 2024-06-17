@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Nouvelle Offre</title>
+    <link rel="stylesheet" href="test.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <header class="row text-center">
+        <h1>Nouvelle Offre</h1>
+      </header>
+
+      <nav
+        class="nav nav-pills navbar-expand-lg navbar-light bg-light mt-2 mb-2"
+      >
+        <a class="nav-item nav-link mx-2" href="accueil_recruteur.html"
+          >Accueil</a
+        >
+        <a class="nav-item nav-link active mx-2" href="gestion_offres.html"
+          >Gestion des offres</a
+        >
+        <a class="nav-item nav-link mx-2" href="gestion_ficheposte.html"
+          >Gestion des fiches de poste</a
+        >
+      </nav>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <form
+            class="form-group"
+            method="POST"
+            action="/recruteur/nouvelle_offre"
+          >
+            <div class="mb-3">
+              <label for="select-ficheposte" class="form-label"
+                >Sélectionner une fiche de poste</label
+              >
+              <select
+                class="form-select"
+                id="select-ficheposte"
+                name="fiche_poste"
+              >
+                <option selected>Choisir...</option>
+                <% fiche.forEach(fiche => { %>
+                <option value="<%= fiche.id %>"><%= fiche.intitule %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="numero-offre" class="form-label"
+                >Numéro d'offre</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="numero-offre"
+                name="numero_offre"
+                placeholder="Entrer le numéro d'offre"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="etat" class="form-label">État</label>
+              <input
+                type="text"
+                class="form-control"
+                id="etat"
+                name="etat"
+                placeholder="Entrer l'état"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="date-validite" class="form-label"
+                >Date de validité</label
+              >
+              <input
+                type="date"
+                class="form-control"
+                id="date-validite"
+                name="date_validite"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="indications" class="form-label">Indications</label>
+              <input
+                type="text"
+                class="form-control"
+                id="indications"
+                name="indications"
+                placeholder="Entrer les indications"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="liste-pieces" class="form-label"
+                >Liste de pièces</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="liste-pieces"
+                name="liste_pieces"
+                placeholder="Entrer la liste de pièces"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="nombre-pieces" class="form-label"
+                >Nombre de pièces</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="nombre-pieces"
+                name="nombre_pieces"
+                placeholder="Entrer le nombre de pièces"
+              />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Créer l'offre</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <footer></footer>
+  </body>
+</html>

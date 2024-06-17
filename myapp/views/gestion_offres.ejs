@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title>Recruteur</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="test.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <header class="row text-center"><h1>Recrutement</h1></header>
+      <nav
+        class="nav nav-pills navbar-expand-lg navbar-light bg-light mt-2 mb-2"
+      >
+        <a class="nav-item nav-link mx-2" href="accueil_recruteur.html"
+          >Accueil</a
+        >
+        <a class="nav-item nav-link active mx-2" href="gestion_offres.html"
+          >Gestion des offres</a
+        >
+        <a class="nav-item nav-link mx-2" href="gestion_ficheposte.html"
+          >Gestion des fiches de poste</a
+        >
+      </nav>
+
+      <div class="row mb-3">
+        <div class="col-sm-12 d-flex justify-content-end">
+          <a
+            href="nouvelle_offre.html"
+            class="btn btn-success mx-2"
+            id="new-offer"
+            >Nouvelle offre</a
+          >
+          <button class="btn btn-warning mx-2" id="edit-offer">
+            Modifier offre
+          </button>
+          <button class="btn btn-danger mx-2" id="delete-offer">
+            Supprimer offre
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="col-sm-6 mb-3">
+            <form class="form-group input-group mb-2">
+              <input
+                type="search"
+                placeholder="Entrer le terme à rechercher..."
+                class="form-control mx-3"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-primary">Rechercher</button>
+              </div>
+            </form>
+            <select class="form-select" aria-label="Trier par…">
+              <option value="1">Date de publication</option>
+              <option value="2">etc...</option>
+              <option value="3">Salaire</option>
+            </select>
+          </div>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th><input type="radio" disabled /></th>
+                <th>ID</th>
+                <th>Intitulé</th>
+                <th>Date candidature</th>
+                <th>Date limite</th>
+                <th>État</th>
+                <th>Voir candidatures</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% offres.forEach(offre => { %>
+              <tr>
+                <th><input name="offre" type="radio" /></th>
+                <td><%= offre.id %></td>
+                <td><%= offre.intitule %></td>
+                <td><%= offre.dateCandidature %></td>
+                <td><%= offre.dateLimite %></td>
+                <td><%= offre.etat %></td>
+                <td><a href="candidatures_offre.html">Voir candidatures</a></td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+
+          <ul class="pagination">
+            <% for (let i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+              <a class="page-link" href="#"><%= i %></a>
+            </li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <footer></footer>
+  </body>
+</html>

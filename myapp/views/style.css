@@ -1,0 +1,49 @@
+body {
+    color: black;
+    background-color: white;
+    background-image: url(https://img.freepik.com/photos-gratuite/assortiment-bureau-plat-tablette-ecran-vide_23-2148707960.jpg?w=2000&t=st=1711730238~exp=1711730838~hmac=c3faec85d42a44b531b8c237e3322147f5dbc9275d67feafe79bbfd96e113cb4);
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+  }
+  
+  .box {
+    border: solid;
+  }
+  
+  .accroche {
+    font-family: "Montserrat", sans-serif;
+    display: inline;
+    font-size: x-large;
+  }
+  .container {
+    width: 300px;
+    padding: 16px;
+    background-color: white;
+    margin: 0 auto;
+    margin-top: 100px;
+    border: 1px solid black;
+    border-radius: 4px;
+  }
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+  }
+  button {
+    background-color: #4caf50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+  button:hover {
+    opacity: 1;
+  }

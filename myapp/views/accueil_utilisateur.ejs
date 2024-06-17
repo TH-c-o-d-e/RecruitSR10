@@ -1,58 +1,132 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <title><%= title %></title>
+    <title>Utilisateur</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="test.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <style>
+      body {
+        background: url("myapp/assets/fond.jpeg") no-repeat center center fixed;
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+        height: 100vh; /* Utilisation de la hauteur de l'écran */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 1200px;
+      }
+      .card {
+        background-color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 20px;
+      }
+      .nav-pills .nav-link {
+        color: #ffffff;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 0.25rem;
+      }
+      .nav-pills .nav-link:hover {
+        color: #000000;
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+      .nav-pills .nav-link.active {
+        color: #ffffff;
+        background-color: #007bff;
+      }
+      .display-4 {
+        font-weight: bold;
+        color: #ffffff;
+        text-shadow: 2px 2px 4px #000000;
+      }
+      .card-title {
+        color: #000000;
+      }
+      .btn {
+        margin-top: 10px;
+      }
+      .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+      }
+      .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+      .btn-primary:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
+      }
+      .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+      }
+      .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+      }
+    </style>
   </head>
   <body>
-    <% if (msg) { %>
-    <script>
-      window.alert("<%= msg %>");
-    </script>
-    <% } %>
-    <div class="container mt-5">
-      <header class="row text-center"><h1>Recrutement</h1></header>
+    <div class="container">
+      <header class="text-center mb-4">
+        <h1 class="display-4">Recrutement</h1>
+      </header>
 
-      <nav
-        class="nav nav-pills navbar-expand-lg navbar-light bg-light mt-2 mb-2"
-      >
-        <a class="nav-item nav-link active mx-2" href="/candidat">Accueil</a>
-        <a class="nav-item nav-link mx-2" href="/candidat/gestion_candidatures"
+      <nav class="nav nav-pills justify-content-center mb-4">
+        <a class="nav-item nav-link active mx-2" href="accueil_utilisateur.html"
+          >Accueil</a
+        >
+        <a class="nav-item nav-link mx-2" href="gestion_candidatures.html"
           >Gestion des candidatures</a
         >
-        <a class="nav-item nav-link mx-2" href="/candidat/offres_emploi"
+        <a class="nav-item nav-link mx-2" href="offres_emploi.html"
           >Afficher offres d'emploi</a
         >
-        <a class="nav-item nav-link mx-2" href="/candidat/formulaire_entreprise"
+        <a class="nav-item nav-link mx-2" href="formulaire_entreprise.html"
           >Nouvelle entreprise</a
         >
       </nav>
 
       <div class="row">
-        <div class="col-sm-4">
-          <h2>Bienvenue <%= user[0].nom %>, <%= user[0].prenom %></h2>
-          <a href="/users/deconnexion" class="btn btn-primary">Déconnexion</a>
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                Bienvenue <%= user[0].nom %>, <%= user[0].prenom %>
+              </h2>
+              <a class="btn btn-danger" href="connexion.html">Déconnexion</a>
+            </div>
+          </div>
         </div>
-        <div class="col-sm-8">
-          <p>Vous avez <%= candidatures_en_cours %> candidatures en cours</p>
-
-          <div class="col-sm-4">
-            <p>
-              Souhaitez-vous devenir recruteur?
+        <div class="col-md-8 mb-4">
+          <div class="card">
+            <div class="card-body become-recruiter">
+              <p class="card-text">Souhaitez-vous devenir recruteur?</p>
+              <% if (user[0].type === 1) { %>
               <a href="/candidat/formulaire_recruteur" class="btn btn-primary"
                 >Devenez recruteur</a
               >
-            </p>
+              <% } else if (user[0].type === 2) { %>
+              <a href="../recruteur" class="btn btn-primary">Recruter</a>
+              <% } %>
+            </div>
           </div>
         </div>
       </div>
-
-      <footer></footer>
     </div>
   </body>
 </html>
