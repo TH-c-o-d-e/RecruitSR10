@@ -38,6 +38,22 @@ module.exports = {
       callback(result.affectedRows > 0); // Renvoie true si la suppression a réussi
     });
   },
+  deleteByUtilisateur: function(utilisateurId, callback) {
+    const sql = `
+      DELETE FROM Candidature 
+      WHERE candidat = ? 
+      AND EXISTS (
+        SELECT 1 FROM Utilisateur WHERE id = ? AND Candidature.candidat = Utilisateur.id
+      )
+    `;
+    db.query(sql, [utilisateurId, utilisateurId], function(err, result) {
+      if (err) {
+        console.error('Erreur lors de la suppression des candidatures de l\'utilisateur:', err);
+        return callback(err);
+      }
+      callback(null, result.affectedRows > 0); // Renvoie true si des candidatures ont été supprimées
+    });
+  },
 
   readByOffre: function (offre, callback) {
     db.query("SELECT * FROM Candidature WHERE offre = ?", [offre], function (err, results) {

@@ -61,6 +61,23 @@ module.exports = {
       callback(results);
     });
   },
+  readPage: function (pageNumber, perPage, callback) {
+    const offset = (pageNumber - 1) * perPage;
+    const sql = "SELECT * FROM Offre LIMIT ?, ?";
+    db.query(sql, [offset, perPage], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+
+  // Fonction pour compter le nombre total d'offres
+  countAll: function (callback) {
+    const sql = "SELECT COUNT(*) AS total FROM Offre";
+    db.query(sql, function (err, results) {
+      if (err) throw err;
+      callback(results[0].total);
+    });
+  },
 
   readByRattachement: function (value, organisation, callback) {
     db.query("SELECT * FROM Offre JOIN Fiche ON Offre.rattachement = Fiche.Intitulé WHERE Fiche.rattachement = ? AND Fiche.Organisation = ?", [value, organisation], callback);
@@ -109,5 +126,15 @@ module.exports = {
 
   readAllNonExpirees: function (callback) {
     db.query("SELECT * FROM Offre WHERE date_validite >= CURDATE() OR date_validite IS NULL", callback);
+
+    
+  },
+  deleteByFiche: function (intitule, organisation, callback) {
+    var sql = "DELETE FROM Offre WHERE rattachement = (SELECT Intitulé FROM Fiche WHERE Intitulé = ? AND Organisation = ?)";
+    db.query(sql, [intitule, organisation], function (err, result) {
+      if (err) throw err;
+      callback(result.affectedRows > 0);
+    });
   }
 };
+

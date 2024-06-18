@@ -41,9 +41,16 @@
                     <div class="mb-3">
                         <label for="role" class="form-label">Rôle</label>
                         <select class="form-select" id="role" name="role" required>
-                            <option value="utilisateur" <%= user.role === '1' ? 'selected' : '' %>1</option>
-                            <option value="administrateur" <%= user.role === '0' ? 'selected' : '' %>0</option>
-                            <option value="recruteur" <%= user.role === '2' ? 'selected' : '' %>2</option>
+                            <option value="1" <%= user.type === 1 ? 'selected' : '' %>>Utilisateur</option>
+                            <option value="0" <%= user.type === 0 ? 'selected' : '' %>>Administrateur</option>
+                            <option value="2" <%= user.type === 2 ? 'selected' : '' %>>Recruteur</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="statut_compte" class="form-label">Statut du compte</label>
+                        <select class="form-select" id="statut_compte" name="statut_compte" required>
+                            <option value="1" <%= user.statut_compte === 1 ? 'selected' : '' %>>Actif</option>
+                            <option value="0" <%= user.statut_compte === 0 ? 'selected' : '' %>>Inactif</option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Modifier</button>

@@ -30,7 +30,6 @@ router.post('/', function(req, res, next) {
     });
   });
   
-  module.exports = router;
 // Afficher la page de succès
 router.get('/success_inscription', (req, res) => {
   res.render('success_inscription');

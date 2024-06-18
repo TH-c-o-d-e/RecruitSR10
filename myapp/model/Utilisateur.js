@@ -18,10 +18,29 @@ module.exports = {
     }); 
   },
 
-  readAll: function (callback) {
-    db.query("SELECT * FROM Utilisateur", function (err, results) {
-      if (err) throw err;
-      callback(results);
+  readAll: function(callback) {
+    const sql = "SELECT * FROM Utilisateur";
+    db.query(sql, function(err, results) {
+      if (err) {
+        console.error('Erreur lors de la récupération des utilisateurs:', err);
+        return callback(err, null);
+      }
+
+      // Mapper les résultats pour transformer les RowDataPacket en objets JavaScript simples
+      const users = results.map(row => ({
+        id: row.id,
+        email: row.email,
+        mot_de_passe: row.mot_de_passe,
+        nom: row.nom,
+        prenom: row.prenom,
+        coordonnees: row.coordonnees,
+        statut_compte: row.statut_compte,
+        type: row.type,
+        organisation: row.organisation
+      }));
+
+      // Appeler le callback avec les utilisateurs transformés
+      callback(null, users);
     });
   },
 

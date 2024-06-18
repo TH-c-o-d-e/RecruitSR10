@@ -103,4 +103,21 @@ module.exports = {
       callback(results);
     });
   },
+  readPage: function (pageNumber, perPage, callback) {
+    const offset = (pageNumber - 1) * perPage;
+    const sql = "SELECT * FROM Fiche LIMIT ?, ?";
+    db.query(sql, [offset, perPage], function (err, results) {
+      if (err) throw err;
+      callback(results);
+    });
+  },
+
+  // Fonction pour compter le nombre total de fiches
+  countAll: function (callback) {
+    const sql = "SELECT COUNT(*) AS total FROM Fiche";
+    db.query(sql, function (err, results) {
+      if (err) throw err;
+      callback(results[0].total);
+    });
+  }
 };
