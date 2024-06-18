@@ -3,12 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('./session');
 var app = express();
 
 var indexRouter = require('./routes/index');
-var inscriptionRouter = require('./routes/inscription'); // Importer le fichier de route pour l'inscription
-var connexionRouter = require("./routes/connexion");
-
+var inscriptionRouter = require('./routes/inscription');
+var connexionRouter = require('./routes/connexion');
+var accueilUtilisateurRouter = require('./routes/accueil_utilisateur'); // Importer la nouvelle route
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,12 +20,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-
+app.use(session.init()); // Initialiser la session
 
 app.use('/', indexRouter);
-app.use('/inscription', inscriptionRouter); // Utiliser la route d'inscription
-app.use('/connexion', connexionRouter); // Utilisation de la nouvelle route de connexion
+app.use('/inscription', inscriptionRouter);
+app.use('/connexion', connexionRouter);
+app.use('/accueil_utilisateur', accueilUtilisateurRouter); // Utiliser la nouvelle route
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -32,11 +34,8 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });

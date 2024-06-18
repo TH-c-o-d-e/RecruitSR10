@@ -4,9 +4,10 @@ const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
   read: function (id, callback) {
-    db.query("SELECT * FROM Utilisateur WHERE id = ?", [id], function (err, results) {
-      if (err) throw err;
-      callback(results);
+    db.query('SELECT * FROM Utilisateur WHERE id = ?', [id], function(err, results) {
+      if (err) return callback(err, null);
+      if (results.length === 0) return callback(null, null);
+      callback(null, results[0]);
     });
   },
 
@@ -24,18 +25,13 @@ module.exports = {
     });
   },
 
-  areValid: function (email, password, callback) { 
-    const sql = "SELECT mot_de_passe FROM Utilisateur WHERE email = ?"; 
-    db.query(sql, [email], function (err, results) { 
-        if (err) throw err; 
-        if (results.length == 1 && results[0].mot_de_passe === password) { 
-            callback(true); 
-        } else { 
-            callback(false); 
-        } 
+  areValid: function(email, mot_de_passe, callback) {
+    db.query('SELECT * FROM Utilisateur WHERE email = ? AND mot_de_passe = ?', [email, mot_de_passe], function(err, results) {
+      if (err) return callback(err, null);
+      if (results.length === 0) return callback(null, false, null);
+      callback(null, true, results[0]);
     });
   },
-
   create: function (email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, callback) {
     var id = uuidv4();
     var sql = "INSERT INTO Utilisateur (id, email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type, organisation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
