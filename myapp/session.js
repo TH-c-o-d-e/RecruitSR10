@@ -1,34 +1,38 @@
-var sessions = require('express-session');
+const session = require('express-session');
 
 module.exports = {
+  // Initialisation de la session
   init: () => {
-    return sessions({
-      secret: 'xxxzzzyyyaaabbbcc',
+    return session({
+      secret: "xxxzzzyyyaaabbbcc",
       saveUninitialized: true,
       cookie: { maxAge: 3600 * 1000 }, // 60 minutes
       resave: false,
     });
   },
 
-  createSession: function (session, userid, type) {
-    if (!session) {
-      throw new Error('Session is not defined.');
-    }
-    session.userid = userid;
-    session.type = type;
-    session.save(function (err) {
-      if (err) {
-        console.error('Erreur lors de la sauvegarde de la session :', err);
-      }
+  // Création d'une session avec un rôle spécifique
+  createSession: function (reqSession, userid, role) {
+    reqSession.userid = userid;
+    reqSession.type = role;
+    reqSession.save(function (err) {
+      if (err) console.error("Erreur lors de la sauvegarde de la session :", err);
     });
-    return session;
+    return reqSession;
   },
 
-  isConnected: (session) => {
-    return session && session.userid !== undefined;
+  // Vérification de l'authentification et du rôle
+  isConnected: function (reqSession) {
+    return reqSession.userid !== undefined;
   },
 
-  deleteSession: function (session) {
-    session.destroy();
+  // Vérification du rôle
+  hasRole: function (reqSession, role) {
+    return reqSession.type === role;
+  },
+
+  // Destruction de la session
+  deleteSession: function (reqSession) {
+    reqSession.destroy();
   },
 };

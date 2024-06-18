@@ -26,10 +26,18 @@ module.exports = {
   },
 
   areValid: function(email, mot_de_passe, callback) {
-    db.query('SELECT * FROM Utilisateur WHERE email = ? AND mot_de_passe = ?', [email, mot_de_passe], function(err, results) {
-      if (err) return callback(err, null);
-      if (results.length === 0) return callback(null, false, null);
-      callback(null, true, results[0]);
+    db.query('SELECT * FROM Utilisateur WHERE email = ? AND mot_de_passe = ?', [email, mot_de_passe], function(error, results, fields) {
+      if (error) {
+        console.error('Erreur lors de la requête à la base de données:', error);
+        return callback(false, null);
+      }
+  
+      if (results.length > 0) {
+        var user = results[0];
+        return callback(true, user);
+      } else {
+        return callback(false, null);
+      } 
     });
   },
   create: function (email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, callback) {

@@ -1,103 +1,92 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
+<head>
     <title>Recruteur</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="test.css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
-      body {
-        background: url("myapp/assets/fond.jpeg") no-repeat center center fixed;
-        background-size: cover;
-        margin: 0;
-        padding: 0;
-        height: 100vh; /* Utilisation de la hauteur de l'écran */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .container {
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-        width: 80%;
-        max-width: 1200px;
-      }
-      .card {
-        background-color: rgba(255, 255, 255, 0.8);
-        margin-bottom: 20px;
-      }
-      .nav-pills .nav-link {
-        color: #ffffff;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 0.25rem;
-      }
-      .nav-pills .nav-link:hover {
-        color: #000000;
-        background-color: rgba(255, 255, 255, 0.8);
-      }
-      .nav-pills .nav-link.active {
-        color: #ffffff;
-        background-color: #007bff;
-      }
-      .display-4 {
-        font-weight: bold;
-        color: #ffffff;
-        text-shadow: 2px 2px 4px #000000;
-      }
-      .card-title {
-        color: #000000;
-      }
-      .btn {
-        margin-top: 10px;
-      }
-      .btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
-      }
-      .btn-danger:hover {
-        background-color: #c82333;
-        border-color: #bd2130;
-      }
+        body {
+            background: url("/images/fond.jpeg") no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 1200px;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+        .nav-pills .nav-link {
+            color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 0.25rem;
+        }
+        .nav-pills .nav-link:hover {
+            color: #000000;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .nav-pills .nav-link.active {
+            color: #ffffff;
+            background-color: #007bff;
+        }
+        .display-4 {
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px #000000;
+        }
+        .card-title {
+            color: #000000;
+        }
+        .btn {
+            margin-top: 10px;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container mt-5">
-      <header class="text-center mb-4">
-        <h1 class="display-4">Recrutement</h1>
-      </header>
+        <header class="text-center mb-4">
+            <h1 class="display-4">Recrutement</h1>
+        </header>
 
-      <nav class="nav nav-pills justify-content-center mb-4">
-        <a class="nav-item nav-link active mx-2" href="accueil_recruteur.html"
-          >Accueil</a
-        >
-        <a class="nav-item nav-link mx-2" href="gestion_offres.html"
-          >Gestion des offres</a
-        >
-        <a class="nav-item nav-link mx-2" href="gestion_ficheposte.html"
-          >Gestion des fiches de poste</a
-        >
-      </nav>
+        <nav class="nav nav-pills justify-content-center mb-4">
+            <a class="nav-item nav-link active mx-2" href="/accueil_recruteur">Accueil</a>
+            <a class="nav-item nav-link mx-2" href="/gestion_offres">Gestion des offres</a>
+            <a class="nav-item nav-link mx-2" href="/gestion_ficheposte">Gestion des fiches de poste</a>
+        </nav>
 
-      <div class="row">
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h2 class="card-title">
-                Bienvenue <%= user[0].nom %>, <%= user[0].prenom %>
-              </h2>
-
-              <a class="btn btn-danger" href="connexion.html">Déconnexion</a>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Bienvenue <%= user.nom %>, <%= user.prenom %></h2>
+                        <a class="btn btn-danger" href="/deconnexion">Déconnexion</a>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="col-md-8 mb-4">
+                <!-- Ajoutez ici tout contenu supplémentaire nécessaire -->
+            </div>
         </div>
-        <div class="col-md-8 mb-4">
-          <!-- Ajoutez ici tout contenu supplémentaire nécessaire -->
-        </div>
-      </div>
     </div>
-  </body>
+</body>
 </html>
+  
