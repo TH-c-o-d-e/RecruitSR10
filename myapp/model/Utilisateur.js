@@ -45,18 +45,22 @@ module.exports = {
   },
 
   areValid: function(email, mot_de_passe, callback) {
-    db.query('SELECT * FROM Utilisateur WHERE email = ? AND mot_de_passe = ?', [email, mot_de_passe], function(error, results, fields) {
-      if (error) {
-        console.error('Erreur lors de la requête à la base de données:', error);
-        return callback(false, null);
+    const sql = 'SELECT * FROM Utilisateur WHERE email = ?';
+    db.query(sql, [email], function(err, results) {
+      if (err) {
+        return callback(err, false, null);
       }
-  
-      if (results.length > 0) {
-        var user = results[0];
-        return callback(true, user);
+      
+      if (results.length === 0) {
+        return callback(null, false, null);
+      }
+
+      const user = results[0];
+      if (user.mot_de_passe === mot_de_passe) {
+        callback(null, true, user);
       } else {
-        return callback(false, null);
-      } 
+        callback(null, false, null);
+      }
     });
   },
   create: function (email, mot_de_passe, prenom, nom, coordonnees, statut_compte, type_compte, organisation, callback) {

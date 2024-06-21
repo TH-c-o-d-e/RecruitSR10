@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title>Utilisateur</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="test.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <header class="row text-center"><h1>Recrutement</h1></header>
+
+      <nav
+        class="nav nav-pills navbar-expand-lg navbar-light bg-light mt-2 mb-2"
+      >
+        <a class="nav-item nav-link mx-2" href="accueil_utilisateur.ejs"
+          >Accueil</a
+        >
+        <a class="nav-item nav-link mx-2" href="gestion_candidatures.ejs"
+          >Gestion des candidatures
+        </a>
+        <a class="nav-item nav-link mx-2" href="offres_emploi.ejs"
+          >Afficher offres d'emploi
+        </a>
+        <a
+          class="nav-item nav-link active mx-2"
+          href="formulaire_entreprise.ejs"
+          >Nouvelle entreprise
+        </a>
+      </nav>
+
+      <div class="row">
+        <div class="col-sm-8">
+          <h1>Demande de création d'entreprise</h1>
+          <form method="POST" action="/entreprises/nouvelle">
+            <div class="mb-4 mt-4">
+              <label for="nom" class="form-label">Nom de l'entreprise : </label>
+              <input
+                type="text"
+                class="form-control"
+                id="nom"
+                name="nom"
+                required="required"
+              />
+            </div>
+            <div class="mb-4 mt-4">
+              <label for="type" class="form-label"
+                >Type (association, SARL…) :
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="type"
+                name="type"
+                required="required"
+              />
+            </div>
+            <div class="mb-4 mt-4">
+              <label for="siret" class="form-label">Numéro de Siret : </label>
+              <input
+                type="text"
+                class="form-control"
+                id="siret"
+                name="siret"
+                required="required"
+              />
+            </div>
+            <div class="mb-4 mt-4">
+              <h3>Adresse</h3>
+              <div class="mb-4 mt-4">
+                <label for="num_rue" class="form-label">Numéro rue : </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="num_rue"
+                  name="num_rue"
+                  required="required"
+                />
+              </div>
+              <div class="mb-4 mt-4">
+                <label for="rue" class="form-label">Nom de rue : </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="rue"
+                  name="rue"
+                  required="required"
+                />
+              </div>
+              <div class="mb-4 mt-4">
+                <label for="ville" class="form-label">Nom de ville : </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ville"
+                  name="ville"
+                  required="required"
+                />
+              </div>
+              <div class="mb-4 mt-4">
+                <label for="code_postal" class="form-label"
+                  >Code postal :
+                </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="code_postal"
+                  name="code_postal"
+                  required="required"
+                />
+              </div>
+              <div class="mb-4 mt-4">
+                <label for="pays" class="form-label">Pays : </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pays"
+                  name="pays"
+                  required="required"
+                />
+              </div>
+            </div>
+            <div class="mt-4 mb-4">
+              <button type="submit" class="btn btn-primary">Valider</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <footer></footer>
+  </body>
+</html>
