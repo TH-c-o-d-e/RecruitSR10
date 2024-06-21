@@ -1,41 +1,23 @@
-# RecruitSR10
+# Architecture du projet
 
+## Dossier model :  
 
+- Contient les fonctions de traitement de la base de données
+- Un fichier js par table 
 
-## FAIT 
+## Dossier routes
 
+- Contient les routes pour chaque page  : se reférer au nom des fichiers pour trouver les vues et modèles liés
 
-- Créer une table demande_recruteur ->  fait
-- Créer une table demande organisation -> fait
+# Dossier views
 
-## URGENT
- 
- - Ajouter une offre pour le recruteur @rayan-nls
- - Ajouter une fiche et gérer les fiches
- - Créer un filtre dynamique qui récupère les villes des candidatures et permet de classer les offres -> fait
- - Filtre  : les fourchettes de salaire, Lieu. -> fait
- - Tri : fourchette salaire, date de publication.  -> fait
- - Créer une fonction de recherche d'un utilisateur -> fait
- - Corriger le modèle offre -> fait
- - Créer route + vue des listes de candidat -> fait 
- - Vérifier la conformité des mots de passe (vérifier les 12 caractères, majuscules, minuscules, etc.) -> fait
- - Récupérer les champs offre.liste_pieces et offre.nombre_pieces dans la vue Candidater  -> fait
- - Les récupérer dans la route pour upload -> fait
- - Mail à  envoyer aussi pour les changements de droits.
- - Faire un filtre pour les offres expirées pour l'utilisateur classique  
- - Valider / refuser une candidature (envoie un mail)
-- Valider / refuser une demande d'organisation (ne supprime pas les demandes) ou de recruteur
+- contient les différentes vues du site : les vues gestions permettent de gérer les objets dans une liste, les vues modifier et nouvelles renvoient vers un formulaire post et les vues accueil servent d'accueil
 
+## session.js contient les modalités d'initialisation des sessions
+## app.js contient les différents chemain utilisés
+## assets contient les logos et bannières
 
+## Couverture des tests
 
-## Liste des vues 
- 
-- Vue historique des demandes d'organisation
-
-
-## A faire
-   
-- Un bouton de modification du profil et de suppression pour l'utilisateur
-- Gérer le téléchargement et l'Upload 
-- Le recruteur doit pouvoir gérer l'organisation (recycler le formulaire) 
-- Chercher comment récupérer le contenu sélectionné
+Modèle testé : utilisateur
+Couverture : 26.5%
