@@ -90,22 +90,15 @@ module.exports = {
     });
   },
   
-  downloadAllPieces: function(candidatureId, callback) {
-    const sql = "SELECT chemin_piece FROM PiecesCandidature WHERE candidature_id = ?";
-    db.query(sql, [candidatureId], function(err, results) {
-      if (err) {
-        console.error(err);
-        return callback(err);
-      }
-
-      if (results.length === 0) {
-        return callback(null, null); // Aucun fichier trouvé
-      }
-
-      const filePaths = results.map(result => result.chemin_piece);
-      callback(null, filePaths);
+  downloadAllPieces: function (candidatureId, callback) {
+    db.query("SELECT chemin_piece FROM PiecesCandidature WHERE candidature_id = ?", [candidatureId], (err, results) => {
+        if (err) {
+            return callback(err, null);
+        }
+        const filePaths = results.map(result => result.chemin_piece);
+        callback(null, filePaths);
     });
-  },
-
+}
 };
+
 

@@ -19,6 +19,7 @@ const offresEmploiRouter = require('./routes/offres_emploi');
 const recruteurRouter = require('./routes/recruteur');
 const entreprisesRouter = require('./routes/entreprises');
 const gestionDemandeOrganisationRouter = require('./routes/gestion_demande_organisation');
+const candidaterRouter = require("./routes/candidater.js");
 const fichePosteRouter =require("./routes/ficheposte.js")
 const auth = require('./middlewares/auth');
 
@@ -69,6 +70,7 @@ app.use('/recruteur', recruteurRouter);
 app.use('/entreprises', entreprisesRouter);
 app.use('/gestion_demande_organisation', auth, gestionDemandeOrganisationRouter);
 app.use('/ficheposte/', fichePosteRouter); // Route pour la création de fiche de poste
+app.use("/candidater", candidaterRouter)
 
 // Middleware pour gérer les erreurs 404 et les passer au middleware d'erreur
 app.use(function(req, res, next) {
