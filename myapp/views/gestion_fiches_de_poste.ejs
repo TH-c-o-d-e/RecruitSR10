@@ -1,123 +1,68 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>Gestion des fiches de poste</title>
     <link rel="stylesheet" href="test.css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
     <div class="container mt-5">
-      <header class="row text-center">
-        <h1>Gestion des fiches de poste</h1>
-      </header>
+        <header class="row text-center">
+            <h1>Gestion des fiches de poste</h1>
+        </header>
 
-      <nav
-        class="nav nav-pills navbar-expand-lg navbar-light bg-light mt-2 mb-2"
-      >
-        <a class="nav-item nav-link mx-2" href="accueil_recruteur.html"
-          >Accueil</a
-        >
-        <a class="nav-item nav-link mx-2" href="gestion_offres.html"
-          >Gestion des offres</a
-        >
-        <a
-          class="nav-item nav-link active mx-2"
-          href="gestion_fiches_de_poste.html"
-          >Gestion des fiches de poste</a
-        >
-      </nav>
+        <nav class="nav nav-pills navbar-expand-lg navbar-light bg-light mt-2 mb-2">
+            <a class="nav-item nav-link mx-2" href="/accueil_recruteur">Accueil</a>
+            <a class="nav-item nav-link mx-2" href="/ficheposte/gestion_fiches_de_poste">Gestion des fiches de poste</a>
+            <a class="nav-item nav-link active mx-2" href="/ficheposte/nouvelle">Nouvelle fiche de poste</a>
+        </nav>
 
-      <div class="row mb-3">
-        <div class="col-sm-12 d-flex justify-content-end">
-          <a
-            href="formulaire_ficheposte.html"
-            class="btn btn-success mx-2"
-            id="new-post"
-            >Nouvelle fiche de poste</a
-          >
-          <button class="btn btn-warning mx-2" id="edit-post">
-            Modifier fiche de poste
-          </button>
-          <button class="btn btn-danger mx-2" id="delete-post">
-            Supprimer fiche de poste
-          </button>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-12">
-          <form class="form-group input-group mb-2">
-            <input
-              type="search"
-              placeholder="Entrer le terme à rechercher..."
-              class="form-control mx-3"
-            />
-            <div class="input-group-append">
-              <button class="btn btn-primary">Rechercher</button>
+        <div class="row mb-3">
+            <div class="col-sm-12 d-flex justify-content-end">
+                <a href="/ficheposte/nouvelle" class="btn btn-success mx-2" id="new-post">Nouvelle fiche de poste</a>
             </div>
-          </form>
-          <select class="form-select" aria-label="Trier par…">
-            <option value="1">Intitulé</option>
-            <option value="2">Statut de poste</option>
-            <option value="3">Lieu de mission</option>
-            <option value="4">Rythme</option>
-            <option value="5">Fourchette de salaire</option>
-          </select>
         </div>
-      </div>
 
-      <table class="table">
-        <thead>
-          <tr>
-            <th><input type="radio" disabled /></th>
-            <th>Intitulé</th>
-            <th>Statut de poste</th>
-            <th>Responsable hiérarchique</th>
-            <th>Lieu de mission</th>
-            <th>Rythme</th>
-            <th>Fourchette de salaire</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% fiche.forEach(fiche => { %>
-          <tr>
-            <th><input name="post" type="radio" value="<%= fiche.id %>" /></th>
-            <td><%= fiche.intitule %></td>
-            <td><%= fiche.statut %></td>
-            <td><%= fiche.responsable %></td>
-            <td><%= fiche.lieu %></td>
-            <td><%= fiche.rythme %></td>
-            <td><%= fiche.salaire %></td>
-          </tr>
-          <% }); %>
-          <!-- Ajouter d'autres fiches de poste ici si nécessaire -->
-        </tbody>
-      </table>
-
-      <ul class="pagination">
-        <!-- Pagination ici si nécessaire -->
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1">Previous</a>
-        </li>
-        <li class="page-item active">
-          <a class="page-link" href="#">1</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">2</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">3</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">Next</a>
-        </li>
-      </ul>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Intitulé</th>
+                            <th scope="col">Statut</th>
+                            <th scope="col">Responsable</th>
+                            <th scope="col">Lieu</th>
+                            <th scope="col">Rythme</th>
+                            <th scope="col">Salaire</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% fiche.forEach(ficheposte => { %>
+                            <tr>
+                                <td><%= ficheposte.id %></td>
+                                <td><%= ficheposte.intitule %></td>
+                                <td><%= ficheposte.statut %></td>
+                                <td><%= ficheposte.responsable %></td>
+                                <td><%= ficheposte.lieu %></td>
+                                <td><%= ficheposte.rythme %></td>
+                                <td><%= ficheposte.salaire %></td>
+                                <td>
+                                    <a href="/ficheposte/modifier/<%= ficheposte.id %>" class="btn btn-primary btn-sm mx-1">Modifier</a>
+                                    <form action="/ficheposte/supprimer/<%= ficheposte.id %>" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm mx-1">Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <footer></footer>
-  </body>
+</body>
 </html>

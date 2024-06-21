@@ -1,26 +1,24 @@
-const express = require('express');
-const router = express.Router();
-const organisationModel = require('../model/Organisation');
+// routes/accueil_recruteur.js
 
-// Route pour afficher le formulaire de création d'une nouvelle entreprise
-router.get('/nouvelle', (req, res) => {
-  res.render('formulaire_entreprise');
-});
+var express = require('express');
+var router = express.Router();
+var sessionManager = require('../session');
+var db = require('../model/Utilisateur.js'); // Assurez-vous que le chemin est correct
 
-// Route pour gérer la création d'une nouvelle entreprise
-router.post('/nouvelle', (req, res) => {
-  const { siret, nom, type, num_rue, rue, ville, code_postal, pays } = req.body;
+router.get('/', function(req, res, next) {
+  if (!sessionManager.isConnected(req.session)) {
+    return res.redirect('/connexion');
+  }
 
-  // Assemblage de l'adresse
-  const siege_social = `${num_rue} ${rue}, ${code_postal} ${ville}, ${pays}`;
+  if (req.session.type !== 2) { // Assurez-vous que l'utilisateur est un recruteur
+    return res.redirect('/accueil_utilisateur');
+  }
 
-  // Appel à la méthode de création du modèle
-  organisationModel.create(siret, nom, type, siege_social, (success) => {
-    if (success) {
-      res.redirect('/recruteur'); // Redirection vers l'accueil recruteur
-    } else {
-      res.status(500).send('Erreur lors de la création de l\'entreprise');
+  db.read(req.session.userid, function(err, user) {
+    if (err) {
+      return next(err);
     }
+    res.render('accueil_recruteur', { title: 'Accueil Recruteur', user: user });
   });
 });
 
