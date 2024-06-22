@@ -51,4 +51,4 @@ router.get('/', function(req, res, next) {
 (Dans notre projet, le type Administrateur est 2 et non pas 'Administrateur' , nous avons laissé Administrateur pour qu'il illustre plus facilement notre exemple)
 Ce système de session pourrait par exemple nous protéger contre cela. On pourrait aussi ajouter des fonction isAuthenticated qui vérifierait si l'utilisateur est authentifié et a les droits d'accès.
 
-Nous pourrions évoquer aussi d'autres mesures de sécurité et de bonnes pratiques tel que le hachage de mots de passe dans la base de données, ne jamais stocker les mots de passe en clair ni les versions hachées non salées dans la base de données afin de protéger efficacement les informations sensibles des utilisateurs etc.
+Nous pourrions évoquer aussi d'autres mesures de sécurité et de bonnes pratiques tel que le hachage de mots de passe dans la base de données, ne jamais stocker les mots de passe en clair dans la base de données afin de protéger efficacement les informations sensibles des utilisateurs etc.
